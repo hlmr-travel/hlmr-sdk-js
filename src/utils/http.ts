@@ -73,7 +73,7 @@ export class HttpClient {
 
     // Ajouter le token Bearer si disponible et non désactivé
     if (this.config.bearerToken && !options.skipAuth) {
-      headers.Authorization = `Bearer ${this.config.bearerToken}`;
+      headers['Authorization'] = `Bearer ${this.config.bearerToken}`;
     }
 
     return headers;

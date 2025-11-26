@@ -45,11 +45,11 @@ export interface JSendErrorResponse {
  * Erreur API Mira personnalisée
  */
 export class HlmrApiError extends Error {
-  public readonly name = 'HlmrApiError';
+  public override readonly name = 'HlmrApiError';
   public readonly statusCode: number;
-  public readonly code?: string | number;
-  public readonly response?: JSendResponse;
-  public readonly originalError?: Error;
+  public readonly code?: string | number | undefined;
+  public readonly response?: JSendResponse | undefined;
+  public readonly originalError?: Error | undefined;
 
   constructor(
     message: string,

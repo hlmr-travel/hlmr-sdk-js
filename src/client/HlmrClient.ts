@@ -6,9 +6,9 @@
 import type {
   HlmrClientOptions,
   HlmrClientConfig,
-  Environment,
-  ENVIRONMENTS
+  Environment
 } from '../types/common';
+import { ENVIRONMENTS } from '../types/common';
 import { HlmrApiError } from '../types/errors';
 import { HttpClient } from '../utils/http';
 import { AuthModule } from '../modules/auth';

@@ -43,16 +43,16 @@ export interface HlmrClientConfig {
   appId: string;
   
   /** Token d'authentification Bearer (optionnel, peut être défini plus tard) */
-  bearerToken?: string;
+  bearerToken?: string | undefined;
   
   /** Timeout pour les requêtes en millisecondes (défaut: 30000) */
-  timeout?: number;
+  timeout?: number | undefined;
   
   /** Headers personnalisés à ajouter à toutes les requêtes */
   customHeaders?: Record<string, string>;
   
   /** Activer les logs de debug (défaut: false) */
-  debug?: boolean;
+  debug?: boolean | undefined;
 }
 
 /**
@@ -66,7 +66,7 @@ export interface HlmrClientOptions {
   appId: string;
   
   /** Token d'authentification Bearer */
-  bearerToken?: string;
+  bearerToken?: string | undefined;
   
   /** Configuration avancée */
   config?: Partial<Omit<HlmrClientConfig, 'baseUrl' | 'appId'>>;
