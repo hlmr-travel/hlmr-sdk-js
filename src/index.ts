@@ -30,8 +30,11 @@ export type {
   SystemVersionResponse
 } from './types/system';
 
+// Classes d'erreur (valeurs)
+export { HlmrApiError } from './types/errors';
+
+// Types d'erreur
 export type {
-  HlmrApiError,
   JSendResponse,
   JSendSuccessResponse,
   JSendFailResponse,
