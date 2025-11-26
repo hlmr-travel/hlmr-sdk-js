@@ -67,6 +67,7 @@ export class HttpClient {
     const headers: Record<string, string> = {
       'Content-Type': 'application/json',
       'X-App-ID': this.config.appId,
+      'X-SDK-Referrer': 'hlmr-sdk-js@1.0.6',
       ...this.config.customHeaders,
       ...options.headers
     };
