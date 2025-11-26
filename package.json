@@ -30,6 +30,9 @@
     "lint": "eslint src/ --ext .ts",
     "lint:fix": "eslint src/ --ext .ts --fix",
     "lint:check": "eslint --print-config src/index.ts",
+    "lint:basic": "eslint src/ --ext .ts --no-eslintrc --parser @typescript-eslint/parser --env es6 --env node",
+    "lint:simple": "eslint src/ --ext .ts -c .eslintrc.simple.js",
+    "lint:test": "./scripts/test-lint.sh",
     "dev": "tsc --watch --module es2015 --outDir dist/esm",
     "prepublishOnly": "npm run build && npm test"
   },

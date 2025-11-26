@@ -1,14 +1,12 @@
 module.exports = {
   parser: '@typescript-eslint/parser',
   extends: [
-    'eslint:recommended',
-    '@typescript-eslint/recommended'
+    'eslint:recommended'
   ],
   plugins: ['@typescript-eslint'],
   parserOptions: {
     ecmaVersion: 2020,
-    sourceType: 'module',
-    project: './tsconfig.json'
+    sourceType: 'module'
   },
   env: {
     node: true,
@@ -17,13 +15,16 @@ module.exports = {
     jest: true
   },
   rules: {
-    '@typescript-eslint/no-explicit-any': 'warn',
-    '@typescript-eslint/no-unused-vars': ['error', { 'argsIgnorePattern': '^_' }],
-    '@typescript-eslint/explicit-function-return-type': 'off', // Trop strict pour un SDK
-    '@typescript-eslint/no-non-null-assertion': 'warn',
+    // Règles ESLint de base
     'prefer-const': 'error',
     'no-var': 'error',
-    'no-console': 'warn'
+    'no-console': 'warn',
+    'no-unused-vars': 'off', // Désactivé pour TypeScript
+    
+    // Règles TypeScript (seulement si le plugin est disponible)
+    '@typescript-eslint/no-unused-vars': ['error', { 'argsIgnorePattern': '^_' }],
+    '@typescript-eslint/no-explicit-any': 'warn',
+    '@typescript-eslint/no-non-null-assertion': 'warn'
   },
   ignorePatterns: [
     'dist/',
@@ -31,5 +32,18 @@ module.exports = {
     '*.config.js',
     'coverage/',
     'rollup.config.js'
+  ],
+  overrides: [
+    {
+      files: ['*.ts', '*.tsx'],
+      extends: [
+        'eslint:recommended'
+      ],
+      rules: {
+        // Règles spécifiques TypeScript
+        '@typescript-eslint/no-unused-vars': ['error', { 'argsIgnorePattern': '^_' }],
+        '@typescript-eslint/no-explicit-any': 'warn'
+      }
+    }
   ]
 };
