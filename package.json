@@ -1,6 +1,6 @@
 {
   "name": "@hlmr/sdk-js",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "SDK JavaScript officiel pour l'API Mira - Routes publiques et sécurisées",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
