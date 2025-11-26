@@ -1,0 +1,217 @@
+name: NPM Token Health Check
+
+on:
+  schedule:
+    # Vérification mensuelle le 1er de chaque mois à 9h UTC
+    - cron: '0 9 1 * *'
+    # Rappels spécifiques pour l'expiration du 24 février 2026
+    - cron: '0 9 24 11 *'  # 24 novembre (3 mois avant)
+    - cron: '0 9 24 1 *'   # 24 janvier (1 mois avant)
+  workflow_dispatch:  # Permet de déclencher manuellement
+
+env:
+  TOKEN_EXPIRY_DATE: "2026-02-24"
+  TOKEN_NAME: "NPM_TOKEN pour SDK Public"
+
+jobs:
+  check-npm-token:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          registry-url: 'https://registry.npmjs.org'
+          
+      - name: Test NPM authentication
+        id: npm-test
+        run: |
+          echo "🔍 Test d'authentification NPM..."
+          if npm whoami; then
+            echo "auth_status=success" >> $GITHUB_OUTPUT
+            echo "✅ Token NPM valide"
+            USER=$(npm whoami)
+            echo "npm_user=$USER" >> $GITHUB_OUTPUT
+          else
+            echo "auth_status=failed" >> $GITHUB_OUTPUT
+            echo "❌ Token NPM invalide ou expiré!"
+          fi
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          
+      - name: Test organization access
+        if: steps.npm-test.outputs.auth_status == 'success'
+        id: org-test
+        run: |
+          echo "🏢 Test d'accès à l'organisation @hlmr..."
+          if npm org ls hlmr; then
+            echo "org_access=success" >> $GITHUB_OUTPUT
+            echo "✅ Accès à l'organisation @hlmr confirmé"
+          else
+            echo "org_access=failed" >> $GITHUB_OUTPUT
+            echo "❌ Pas d'accès à l'organisation @hlmr"
+          fi
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          
+      - name: Calculate days until expiry
+        id: expiry-calc
+        run: |
+          EXPIRY_DATE="${{ env.TOKEN_EXPIRY_DATE }}"
+          CURRENT_DATE=$(date +%Y-%m-%d)
+          EXPIRY_TIMESTAMP=$(date -d "$EXPIRY_DATE" +%s)
+          CURRENT_TIMESTAMP=$(date -d "$CURRENT_DATE" +%s)
+          DAYS_UNTIL_EXPIRY=$(( (EXPIRY_TIMESTAMP - CURRENT_TIMESTAMP) / 86400 ))
+          
+          echo "days_until_expiry=$DAYS_UNTIL_EXPIRY" >> $GITHUB_OUTPUT
+          echo "📅 Jours jusqu'à expiration: $DAYS_UNTIL_EXPIRY"
+          
+          if [ $DAYS_UNTIL_EXPIRY -le 30 ]; then
+            echo "urgency=critical" >> $GITHUB_OUTPUT
+          elif [ $DAYS_UNTIL_EXPIRY -le 90 ]; then
+            echo "urgency=warning" >> $GITHUB_OUTPUT
+          else
+            echo "urgency=info" >> $GITHUB_OUTPUT
+          fi
+          
+      - name: Create urgent reminder issue
+        if: steps.npm-test.outputs.auth_status == 'failed' || steps.expiry-calc.outputs.urgency == 'critical'
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const authStatus = '${{ steps.npm-test.outputs.auth_status }}';
+            const daysUntilExpiry = '${{ steps.expiry-calc.outputs.days_until_expiry }}';
+            const expiryDate = '${{ env.TOKEN_EXPIRY_DATE }}';
+            
+            let title, body, labels;
+            
+            if (authStatus === 'failed') {
+              title = '🚨 URGENT: Token NPM invalide ou expiré';
+              labels = ['urgent', 'infrastructure', 'npm-token'];
+              body = `
+              ## ⚠️ Action immédiate requise : Token NPM invalide
+              
+              Le token NPM utilisé pour la publication automatique du SDK public est **invalide ou expiré**.
+              
+              ### 🔥 Impact :
+              - ❌ Impossible de publier de nouvelles versions
+              - ❌ Les GitHub Actions de publication échoueront
+              - ❌ Pas d'accès à l'organisation @hlmr
+              
+              ### 📋 Actions à effectuer IMMÉDIATEMENT :
+              1. 🔑 Créer un nouveau Granular Access Token sur [npmjs.com](https://www.npmjs.com/settings/tokens)
+              2. ⚙️ Configurer les permissions pour l'organisation @hlmr
+              3. 🔄 Mettre à jour le secret \`NPM_TOKEN\` dans [GitHub Secrets](https://github.com/${context.repo.owner}/${context.repo.repo}/settings/secrets/actions)
+              4. ✅ Tester avec une publication ou déclencher ce workflow manuellement
+              5. 🗑️ Révoquer l'ancien token sur npmjs.com
+              
+              ### 🔗 Liens utiles :
+              - [NPM Access Tokens](https://www.npmjs.com/settings/tokens)
+              - [GitHub Secrets](https://github.com/${context.repo.owner}/${context.repo.repo}/settings/secrets/actions)
+              - [Documentation rotation tokens](../GITHUB_ACTIONS_SETUP.md)
+              `;
+            } else {
+              title = \`🚨 Token NPM expire dans \${daysUntilExpiry} jours\`;
+              labels = ['urgent', 'infrastructure', 'npm-token', 'expiration'];
+              body = \`
+              ## ⏰ Token NPM expire bientôt !
+              
+              Le token NPM pour le SDK public expire le **\${expiryDate}** (dans \${daysUntilExpiry} jours).
+              
+              ### 📋 Actions à effectuer avant expiration :
+              1. 🔑 Créer un nouveau Granular Access Token sur [npmjs.com](https://www.npmjs.com/settings/tokens)
+              2. ⚙️ Configurer les permissions pour l'organisation @hlmr
+              3. 🧪 Tester le nouveau token localement : \`npm whoami\`
+              4. 🔄 Mettre à jour le secret \`NPM_TOKEN\` dans GitHub
+              5. ✅ Déclencher ce workflow pour vérifier
+              6. 🗑️ Révoquer l'ancien token après confirmation
+              
+              ### 💡 Recommandations :
+              - Créer le token avec une durée maximale (1-2 ans)
+              - Choisir une date d'expiration mémorable
+              - Documenter la nouvelle date d'expiration
+              
+              ### 🔗 Liens utiles :
+              - [NPM Access Tokens](https://www.npmjs.com/settings/tokens)
+              - [GitHub Secrets](https://github.com/\${context.repo.owner}/\${context.repo.repo}/settings/secrets/actions)
+              \`;
+            }
+            
+            // Vérifier si un issue similaire existe déjà
+            const existingIssues = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              labels: 'npm-token'
+            });
+            
+            if (existingIssues.data.length === 0) {
+              await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title: title,
+                body: body,
+                labels: labels
+              });
+              console.log('✅ Issue de rappel créé');
+            } else {
+              console.log('ℹ️ Un issue de rappel existe déjà');
+            }
+            
+      - name: Create warning reminder issue
+        if: steps.npm-test.outputs.auth_status == 'success' && steps.expiry-calc.outputs.urgency == 'warning'
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const daysUntilExpiry = '${{ steps.expiry-calc.outputs.days_until_expiry }}';
+            const expiryDate = '${{ env.TOKEN_EXPIRY_DATE }}';
+            
+            // Vérifier si un issue similaire existe déjà
+            const existingIssues = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              labels: 'npm-token'
+            });
+            
+            if (existingIssues.data.length === 0) {
+              await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title: `⚠️ Rappel: Token NPM expire dans ${daysUntilExpiry} jours`,
+                body: `
+                ## 📅 Rappel de rotation du token NPM
+                
+                Le token NPM pour le SDK public expire le **${expiryDate}** (dans ${daysUntilExpiry} jours).
+                
+                ### 📋 Planification recommandée :
+                - **Maintenant** : Préparer la rotation
+                - **Dans 2 semaines** : Créer le nouveau token
+                - **1 semaine avant** : Effectuer la rotation
+                
+                ### 🔧 Procédure de rotation :
+                1. Créer un nouveau Granular Access Token
+                2. Tester localement
+                3. Mettre à jour GitHub Secrets
+                4. Vérifier les publications
+                5. Révoquer l'ancien token
+                
+                ### 🔗 Ressources :
+                - [NPM Tokens](https://www.npmjs.com/settings/tokens)
+                - [GitHub Secrets](https://github.com/${context.repo.owner}/${context.repo.repo}/settings/secrets/actions)
+                `,
+                labels: ['infrastructure', 'npm-token', 'reminder']
+              });
+            }
+            
+      - name: Log success status
+        if: steps.npm-test.outputs.auth_status == 'success' && steps.expiry-calc.outputs.urgency == 'info'
+        run: |
+          echo "✅ Token NPM en bonne santé"
+          echo "👤 Utilisateur NPM: ${{ steps.npm-test.outputs.npm_user }}"
+          echo "🏢 Accès organisation: ${{ steps.org-test.outputs.org_access }}"
+          echo "📅 Expire dans: ${{ steps.expiry-calc.outputs.days_until_expiry }} jours"

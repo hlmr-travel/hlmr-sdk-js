@@ -38,6 +38,10 @@ export type {
   JSendErrorResponse
 } from './types/errors';
 
+export type {
+  HttpClient
+} from './utils/http';
+
 // Utilitaires publics
 export { isJSendResponse, isJSendSuccess, isJSendFail, isJSendError } from './utils/jsend';
 
