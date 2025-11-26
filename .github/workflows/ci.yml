@@ -25,8 +25,20 @@ jobs:
           cache: 'npm'
           
       - name: Install dependencies
-        run: npm ci
+        run: |
+          npm ci
+          # Vérifier que les dépendances ESLint sont bien installées
+          npm list @typescript-eslint/parser @typescript-eslint/eslint-plugin || echo "ESLint deps check"
         
+      - name: Debug ESLint setup
+        run: |
+          echo "🔍 Vérification de la configuration ESLint..."
+          npm list eslint @typescript-eslint/parser @typescript-eslint/eslint-plugin
+          echo "📁 Fichiers de configuration:"
+          ls -la .eslintrc.js tsconfig.json
+          echo "🧪 Test ESLint sur un fichier simple:"
+          npx eslint --version
+          
       - name: Run linter
         run: npm run lint
         

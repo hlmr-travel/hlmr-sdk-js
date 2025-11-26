@@ -6,19 +6,20 @@ module.exports = {
   ],
   plugins: ['@typescript-eslint'],
   parserOptions: {
-    ecmaVersion: 2018,
-    sourceType: 'module'
+    ecmaVersion: 2020,
+    sourceType: 'module',
+    project: './tsconfig.json'
   },
   env: {
     node: true,
     browser: true,
-    es6: true,
+    es2020: true,
     jest: true
   },
   rules: {
     '@typescript-eslint/no-explicit-any': 'warn',
-    '@typescript-eslint/no-unused-vars': 'error',
-    '@typescript-eslint/explicit-function-return-type': 'warn',
+    '@typescript-eslint/no-unused-vars': ['error', { 'argsIgnorePattern': '^_' }],
+    '@typescript-eslint/explicit-function-return-type': 'off', // Trop strict pour un SDK
     '@typescript-eslint/no-non-null-assertion': 'warn',
     'prefer-const': 'error',
     'no-var': 'error',
@@ -28,6 +29,7 @@ module.exports = {
     'dist/',
     'node_modules/',
     '*.config.js',
-    'coverage/'
+    'coverage/',
+    'rollup.config.js'
   ]
 };
