@@ -57,6 +57,11 @@ export class HttpClient {
       return `${baseUrl}/${cleanPath}`;
     }
     
+    // Si apiVersion est vide, ne pas ajouter de version
+    if (!apiVersion) {
+      return `${baseUrl}/${cleanPath}`;
+    }
+    
     return `${baseUrl}/${apiVersion}/${cleanPath}`;
   }
 
