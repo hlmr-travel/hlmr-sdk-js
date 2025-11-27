@@ -137,22 +137,28 @@ export class HlmrClient {
 
   /**
    * Créer une instance pour la production
+   * @param appId ID de l'application (défaut: 'default' pour les composants système)
+   * @param bearerToken Token d'authentification optionnel
    */
-  static forProduction(appId: string, bearerToken?: string): HlmrClient {
+  static forProduction(appId: string = 'default', bearerToken?: string): HlmrClient {
     return HlmrClient.forEnvironment('production', appId, bearerToken);
   }
 
   /**
    * Créer une instance pour le développement
+   * @param appId ID de l'application (défaut: 'default' pour les composants système)
+   * @param bearerToken Token d'authentification optionnel
    */
-  static forDevelopment(appId: string, bearerToken?: string): HlmrClient {
+  static forDevelopment(appId: string = 'default', bearerToken?: string): HlmrClient {
     return HlmrClient.forEnvironment('development', appId, bearerToken);
   }
 
   /**
    * Créer une instance pour le staging
+   * @param appId ID de l'application (défaut: 'default' pour les composants système)
+   * @param bearerToken Token d'authentification optionnel
    */
-  static forStaging(appId: string, bearerToken?: string): HlmrClient {
+  static forStaging(appId: string = 'default', bearerToken?: string): HlmrClient {
     return HlmrClient.forEnvironment('staging', appId, bearerToken);
   }
 }
