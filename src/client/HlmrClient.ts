@@ -179,4 +179,22 @@ export class HlmrClient {
   static forStaging(appId: string = 'default', bearerToken?: string): HlmrClient {
     return HlmrClient.forEnvironment('staging', appId, bearerToken);
   }
+
+  /**
+   * Faire une requête directe vers une URL complète (pour appels externes)
+   * Utile pour vérifier des services externes, health checks, etc.
+   * 
+   * @param url URL complète (ex: http://service:3000/ready)
+   * @param method Méthode HTTP (défaut: GET)
+   * @param body Corps de la requête (optionnel)
+   * @param options Options de requête (timeout, headers, etc.)
+   */
+  async directRequest<T>(
+    url: string,
+    method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE' = 'GET',
+    body?: any,
+    options?: { timeout?: number; headers?: Record<string, string> }
+  ) {
+    return this.httpClient.directRequest<T>(url, method, body, options);
+  }
 }

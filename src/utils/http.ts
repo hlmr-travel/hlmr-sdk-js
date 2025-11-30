@@ -63,6 +63,11 @@ export class HttpClient {
    * Construire l'URL complète pour une requête
    */
   private buildUrl(path: string, apiVersion = 'v1'): string {
+    // Si le path est déjà une URL complète (http:// ou https://), l'utiliser directement
+    if (path.startsWith('http://') || path.startsWith('https://')) {
+      return path;
+    }
+    
     const baseUrl = this.config.baseUrl.replace(/\/$/, '');
     const cleanPath = path.replace(/^\//, '');
     
@@ -273,5 +278,62 @@ export class HttpClient {
    */
   async delete<T>(path: string, options?: RequestOptions): Promise<HttpResponse<T>> {
     return this.request<T>('DELETE', path, undefined, options);
+  }
+
+  /**
+   * Faire une requête directe vers une URL complète (pour appels externes)
+   * Utile pour vérifier des services externes, health checks, etc.
+   */
+  async directRequest<T>(
+    url: string,
+    method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE' = 'GET',
+    body?: any,
+    options: RequestOptions = {}
+  ): Promise<HttpResponse<T>> {
+    const headers: Record<string, string> = {
+      'Content-Type': 'application/json',
+      ...options.headers
+    };
+
+    const timeout = options.timeout || this.config.timeout || 30000;
+    const controller = this.createTimeoutController(timeout);
+
+    if (this.config.debug) {
+      console.log(`[HlmrSDK] Direct ${method} ${url}`, { headers, body });
+    }
+
+    const requestInit: RequestInit = {
+      method,
+      headers,
+      signal: controller.signal
+    };
+
+    if (body && ['POST', 'PUT', 'PATCH'].includes(method)) {
+      requestInit.body = typeof body === 'string' ? body : JSON.stringify(body);
+    }
+
+    try {
+      const response = await fetch(url, requestInit);
+      const result = await this.processResponse<T>(response);
+      
+      if (this.config.debug) {
+        console.log(`[HlmrSDK] Direct Response:`, result);
+      }
+      
+      return result;
+    } catch (error) {
+      if (error instanceof HlmrApiError) {
+        throw error;
+      }
+
+      if (error instanceof Error) {
+        if (error.name === 'AbortError') {
+          throw HlmrApiError.timeoutError(timeout);
+        }
+        throw HlmrApiError.networkError(error);
+      }
+
+      throw new HlmrApiError('Unknown error occurred', 0, 'UNKNOWN_ERROR');
+    }
   }
 }
