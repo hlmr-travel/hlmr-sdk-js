@@ -39,5 +39,19 @@ export class SystemModule {
     });
     return response.data;
   }
+
+  /**
+   * Vérifier le statut ready d'un service
+   * 
+   * @param serviceName Nom du service (sans suffixe -api)
+   * @returns Réponse du health check
+   */
+  async checkServiceReady(serviceName: string): Promise<{ status: string }> {
+    const response = await this.http.get<{ status: string }>(`ready/${serviceName}`, {
+      apiVersion: '', // Route sans version
+      skipAuth: true // Route publique
+    });
+    return response.data;
+  }
 }
 
