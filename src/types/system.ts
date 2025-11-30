@@ -44,3 +44,4 @@ export interface SystemVersionResponse {
   /** Services disponibles */
   services?: string[];
 }
+

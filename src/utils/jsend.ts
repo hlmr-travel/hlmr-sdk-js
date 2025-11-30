@@ -92,3 +92,4 @@ export function createJSendError(message: string, code?: string | number): JSend
     ...(code && { code })
   };
 }
+

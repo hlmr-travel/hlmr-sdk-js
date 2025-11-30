@@ -179,7 +179,27 @@ export class HttpClient {
     }
 
     try {
-      const response = await fetch(url, requestInit);
+      let response = await fetch(url, requestInit);
+      
+      // Gérer les redirections 307 (Temporary Redirect) pour les URLs mal formées
+      if (response.status === 307 || response.status === 301 || response.status === 302) {
+        const location = response.headers.get('location');
+        if (location) {
+          console.warn(
+            `[HlmrSDK] Received ${response.status} redirect for ${url}. ` +
+            `Following redirect to ${location}. ` +
+            `Please update your code to use the correct URL with trailing slash.`
+          );
+          
+          // Suivre la redirection
+          const redirectUrl = location.startsWith('http') 
+            ? location 
+            : new URL(location, url).toString();
+          
+          response = await fetch(redirectUrl, requestInit);
+        }
+      }
+      
       const result = await this.processResponse<T>(response);
       
       if (this.config.debug) {

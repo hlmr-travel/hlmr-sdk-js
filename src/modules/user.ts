@@ -22,3 +22,4 @@ export class UserModule {
     return response.data;
   }
 }
+

@@ -215,3 +215,4 @@ jobs:
           echo "👤 Utilisateur NPM: ${{ steps.npm-test.outputs.npm_user }}"
           echo "🏢 Accès organisation: ${{ steps.org-test.outputs.org_access }}"
           echo "📅 Expire dans: ${{ steps.expiry-calc.outputs.days_until_expiry }} jours"
+

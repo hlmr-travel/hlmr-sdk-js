@@ -43,3 +43,4 @@ else
     echo "⚠️ Abandon du linting pour ce build"
     exit 1
 fi
+

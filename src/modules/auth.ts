@@ -40,3 +40,4 @@ export class AuthModule {
     return response.data;
   }
 }
+

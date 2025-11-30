@@ -31,3 +31,4 @@ export interface AuthValidateRedirectResponse {
   /** Message d'erreur si invalide */
   error?: string;
 }
+
