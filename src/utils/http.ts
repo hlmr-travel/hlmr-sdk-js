@@ -46,6 +46,20 @@ export class HttpClient {
   }
 
   /**
+   * Mettre à jour le secret de l'application
+   */
+  setAppSecret(secret: string): void {
+    this.config.appSecret = secret;
+  }
+
+  /**
+   * Supprimer le secret de l'application
+   */
+  clearAppSecret(): void {
+    delete this.config.appSecret;
+  }
+
+  /**
    * Construire l'URL complète pour une requête
    */
   private buildUrl(path: string, apiVersion = 'v1'): string {
@@ -77,8 +91,11 @@ export class HttpClient {
       ...options.headers
     };
 
-    // Ajouter le token Bearer si disponible et non désactivé
-    if (this.config.bearerToken && !options.skipAuth) {
+    // Priorité : si appSecret est défini, l'utiliser (authentification sans JWT)
+    // Sinon, utiliser bearerToken si disponible
+    if (this.config.appSecret && !options.skipAuth) {
+      headers['X-App-Secret'] = this.config.appSecret;
+    } else if (this.config.bearerToken && !options.skipAuth) {
       headers['Authorization'] = `Bearer ${this.config.bearerToken}`;
     }
 

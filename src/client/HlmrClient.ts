@@ -69,6 +69,7 @@ export class HlmrClient {
       baseUrl,
       appId: options.appId,
       bearerToken: options.bearerToken,
+      appSecret: options.appSecret,
       timeout: options.config?.timeout || 30000,
       customHeaders: options.config?.customHeaders || {},
       debug: options.config?.debug || false
@@ -90,6 +91,23 @@ export class HlmrClient {
    */
   clearBearerToken(): void {
     this.httpClient.clearBearerToken();
+  }
+
+  /**
+   * Mettre à jour le secret de l'application
+   */
+  setAppSecret(secret: string): void {
+    if (!secret || typeof secret !== 'string') {
+      throw HlmrApiError.configError('App secret must be a non-empty string');
+    }
+    this.httpClient.setAppSecret(secret);
+  }
+
+  /**
+   * Supprimer le secret de l'application
+   */
+  clearAppSecret(): void {
+    this.httpClient.clearAppSecret();
   }
 
   /**

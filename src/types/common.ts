@@ -45,6 +45,9 @@ export interface HlmrClientConfig {
   /** Token d'authentification Bearer (optionnel, peut être défini plus tard) */
   bearerToken?: string | undefined;
   
+  /** Secret de l'application pour authentification sans JWT (optionnel) */
+  appSecret?: string | undefined;
+  
   /** Timeout pour les requêtes en millisecondes (défaut: 30000) */
   timeout?: number | undefined;
   
@@ -67,6 +70,9 @@ export interface HlmrClientOptions {
   
   /** Token d'authentification Bearer */
   bearerToken?: string | undefined;
+  
+  /** Secret de l'application pour authentification sans JWT */
+  appSecret?: string | undefined;
   
   /** Configuration avancée */
   config?: Partial<Omit<HlmrClientConfig, 'baseUrl' | 'appId'>>;
