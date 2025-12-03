@@ -14,6 +14,7 @@ import { HttpClient } from '../utils/http';
 import { AuthModule } from '../modules/auth';
 import { UserModule } from '../modules/user';
 import { SystemModule } from '../modules/system';
+import { AppsModule } from '../modules/apps';
 
 /**
  * Client principal pour l'API Mira (routes publiques)
@@ -29,6 +30,9 @@ export class HlmrClient {
   
   /** Module système */
   public readonly system: SystemModule;
+  
+  /** Module applications */
+  public readonly apps: AppsModule;
 
   constructor(options: HlmrClientOptions) {
     const config = this.buildConfig(options);
@@ -38,6 +42,7 @@ export class HlmrClient {
     this.auth = new AuthModule(this.httpClient);
     this.user = new UserModule(this.httpClient);
     this.system = new SystemModule(this.httpClient);
+    this.apps = new AppsModule(this.httpClient);
   }
 
   /**

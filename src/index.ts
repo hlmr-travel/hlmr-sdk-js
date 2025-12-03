@@ -27,8 +27,14 @@ export type {
 
 export type {
   SystemPingResponse,
+  SystemPingOptions,
   SystemVersionResponse
 } from './types/system';
+
+export type {
+  LogSessionOptions,
+  LogSessionResponse
+} from './modules/apps';
 
 // Classes d'erreur (valeurs)
 export { HlmrApiError } from './types/errors';

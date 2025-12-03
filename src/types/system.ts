@@ -3,26 +3,49 @@
  */
 
 /**
+ * Options pour le ping système
+ */
+export interface SystemPingOptions {
+  /** Temps d'inactivité en secondes */
+  idle?: string | number;
+  
+  /** ID de l'application */
+  app?: string;
+  
+  /** Latitude GPS */
+  lat?: string | number;
+  
+  /** Longitude GPS */
+  lng?: string | number;
+  
+  /** Type d'appareil */
+  device?: string;
+}
+
+/**
  * Réponse du ping système
  */
 export interface SystemPingResponse {
-  /** Message de confirmation */
-  message: string;
+  /** Statut d'authentification */
+  authenticated: boolean;
+  
+  /** ID de l'utilisateur */
+  user_id: string;
+  
+  /** ID de l'application */
+  app_id: string;
+  
+  /** ID de session Supabase (depuis JWT) */
+  session_id?: string;
+  
+  /** Scopes disponibles pour l'utilisateur */
+  scopes: string[];
   
   /** Timestamp du ping */
   timestamp: string;
   
-  /** Informations sur l'utilisateur authentifié */
-  user?: {
-    id: string;
-    email: string;
-  };
-  
-  /** Informations sur l'application */
-  app?: {
-    id: string;
-    name: string;
-  };
+  /** Temps d'inactivité en secondes (si fourni) */
+  idle_seconds?: number;
 }
 
 /**
@@ -44,4 +67,6 @@ export interface SystemVersionResponse {
   /** Services disponibles */
   services?: string[];
 }
+
+
 
