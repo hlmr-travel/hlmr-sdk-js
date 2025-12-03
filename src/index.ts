@@ -36,6 +36,8 @@ export type {
   LogSessionResponse
 } from './modules/apps';
 
+export { AppsModule } from './modules/apps';
+
 // Classes d'erreur (valeurs)
 export { HlmrApiError } from './types/errors';
 

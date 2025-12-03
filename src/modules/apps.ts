@@ -40,7 +40,11 @@ export interface LogSessionResponse {
  * Module de gestion des applications
  */
 export class AppsModule {
-  constructor(private http: HttpClient) {}
+  protected http: HttpClient;
+  
+  constructor(http: HttpClient) {
+    this.http = http;
+  }
 
   /**
    * Logger une session d'utilisation d'une app
