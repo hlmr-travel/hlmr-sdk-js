@@ -15,6 +15,8 @@ import { AuthModule } from '../modules/auth';
 import { UserModule } from '../modules/user';
 import { SystemModule } from '../modules/system';
 import { AppsModule } from '../modules/apps';
+import { EventsModule } from '../modules/events';
+import type { EventsModuleConfig } from '../types/events';
 
 /**
  * Client principal pour l'API Mira (routes publiques)
@@ -33,8 +35,11 @@ export class HlmrClient {
   
   /** Module applications */
   public readonly apps: AppsModule;
+  
+  /** Module événements temps réel (WebSocket) */
+  public readonly events: EventsModule;
 
-  constructor(options: HlmrClientOptions) {
+  constructor(options: HlmrClientOptions & { eventsConfig?: EventsModuleConfig }) {
     const config = this.buildConfig(options);
     this.httpClient = new HttpClient(config);
     
@@ -43,6 +48,7 @@ export class HlmrClient {
     this.user = new UserModule(this.httpClient);
     this.system = new SystemModule(this.httpClient);
     this.apps = new AppsModule(this.httpClient);
+    this.events = new EventsModule(this.httpClient, options.eventsConfig);
   }
 
   /**

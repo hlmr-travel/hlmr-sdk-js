@@ -38,6 +38,24 @@ export type {
 
 export { AppsModule } from './modules/apps';
 
+// Events module (WebSocket)
+export { EventsModule } from './modules/events';
+
+export type {
+  Subscription,
+  SubscriptionOptions,
+  SubscriptionFilters,
+  EventNotification,
+  SystemNotification,
+  ConnectedMessage,
+  SubscriptionConfirmedMessage,
+  UnsubscribedMessage,
+  ErrorMessage,
+  WebSocketMessage,
+  EventsModuleConfig,
+  EventsModuleEvents
+} from './types/events';
+
 // Classes d'erreur (valeurs)
 export { HlmrApiError } from './types/errors';
 
