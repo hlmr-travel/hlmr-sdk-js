@@ -85,10 +85,17 @@ export class EventsModule {
   
   // Connection state
   private userId: string | null = null;
+  private bearerToken: string | null = null;
+  private authResolve: ((msg: ConnectedMessage) => void) | null = null;
+  private authReject: ((err: Error) => void) | null = null;
 
   constructor(http: HttpClient, config?: EventsModuleConfig) {
     this.http = http;
     this.config = { ...DEFAULT_CONFIG, ...config };
+    
+    // Extract bearer token from http client config
+    const httpConfig = (http as any).config;
+    this.bearerToken = httpConfig.bearerToken || null;
   }
 
   /**
@@ -115,6 +122,10 @@ export class EventsModule {
   private async _connect(): Promise<ConnectedMessage> {
     return new Promise((resolve, reject) => {
       try {
+        // Store resolve/reject for auth flow
+        this.authResolve = resolve;
+        this.authReject = reject;
+        
         const wsUrl = this._buildWebSocketUrl();
         
         if (this.config.debug) {
@@ -128,22 +139,45 @@ export class EventsModule {
           if (this.ws && this.ws.readyState !== WebSocket.OPEN) {
             this.ws.close();
             this.isConnecting = false;
+            this.authResolve = null;
+            this.authReject = null;
             reject(new Error('Connection timeout'));
           }
         }, 10000);
 
         this.ws.onopen = () => {
           if (this.config.debug) {
-            console.log('[EventsModule] WebSocket connected');
+            console.log('[EventsModule] WebSocket connected, sending auth...');
           }
           clearTimeout(connectionTimeout);
-          this._startPingInterval();
+          
+          // Send authentication token as first message
+          if (this.bearerToken) {
+            const authMessage = {
+              type: 'auth',
+              token: this.bearerToken
+            };
+            this.ws!.send(JSON.stringify(authMessage));
+            
+            if (this.config.debug) {
+              console.log('[EventsModule] Sent auth message');
+            }
+            
+            // Start ping interval after auth (will be started after 'connected' message)
+          } else {
+            // No token, reject connection
+            this.isConnecting = false;
+            this.authResolve = null;
+            this.authReject = null;
+            this.ws!.close(1008, 'Missing authentication token');
+            reject(new Error('Missing authentication token'));
+          }
         };
 
         this.ws.onmessage = (event) => {
           try {
             const message: WebSocketMessage = JSON.parse(event.data);
-            this._handleMessage(message, resolve);
+            this._handleMessage(message);
           } catch (err) {
             if (this.config.debug) {
               console.error('[EventsModule] Failed to parse message:', err);
@@ -157,7 +191,10 @@ export class EventsModule {
           }
           clearTimeout(connectionTimeout);
           this.isConnecting = false;
+          this.authResolve = null;
+          this.authReject = null;
           this._emit('error', new Error('WebSocket error'));
+          reject(new Error('WebSocket error'));
         };
 
         this.ws.onclose = (event) => {
@@ -167,6 +204,14 @@ export class EventsModule {
           clearTimeout(connectionTimeout);
           this._stopPingInterval();
           this.isConnecting = false;
+          
+          // Reject pending auth if connection closed before authentication
+          if (this.authReject) {
+            this.authReject(new Error(event.reason || 'Connection closed before authentication'));
+            this.authResolve = null;
+            this.authReject = null;
+          }
+          
           this._emit('disconnect', event.reason || 'Connection closed');
 
           // Handle reconnection
@@ -176,6 +221,8 @@ export class EventsModule {
         };
       } catch (err) {
         this.isConnecting = false;
+        this.authResolve = null;
+        this.authReject = null;
         reject(err);
       }
     });
@@ -375,23 +422,17 @@ export class EventsModule {
     // Get base URL from http client config
     const httpConfig = (this.http as any).config;
     const baseUrl = httpConfig.baseUrl;
-    const bearerToken = httpConfig.bearerToken;
     
     // Convert HTTP URL to WebSocket URL
     const wsUrl = baseUrl
       .replace('https://', 'wss://')
       .replace('http://', 'ws://');
     
-    // Build WebSocket URL with token as query param (fallback auth method)
-    const url = new URL(`${wsUrl}/v1/events/ws`);
-    if (bearerToken) {
-      url.searchParams.set('token', bearerToken);
-    }
-    
-    return url.toString();
+    // Build WebSocket URL without token (token will be sent as first message)
+    return `${wsUrl}/v1/events/ws`;
   }
 
-  private _handleMessage(message: WebSocketMessage, connectResolve?: (msg: ConnectedMessage) => void): void {
+  private _handleMessage(message: WebSocketMessage): void {
     if (this.config.debug) {
       console.log('[EventsModule] Message received:', message);
     }
@@ -402,16 +443,33 @@ export class EventsModule {
         this.userId = message.user_id;
         this._emit('connect', message);
         
-        // Resolve connect promise
-        if (connectResolve) {
-          connectResolve(message);
+        // Resolve connect promise (from auth flow)
+        if (this.authResolve) {
+          this.authResolve(message);
+          this.authResolve = null;
+          this.authReject = null;
         }
+        
+        // Start ping interval after successful connection
+        this._startPingInterval();
         
         // Re-subscribe to previous subscriptions after reconnection
         if (this.reconnectAttempts > 0) {
           this._resubscribeAll();
         }
         this.reconnectAttempts = 0;
+        break;
+      
+      case 'auth_error':
+        // Authentication failed
+        this.isConnecting = false;
+        const error = (message as any).error || 'Authentication failed';
+        if (this.authReject) {
+          this.authReject(new Error(error));
+          this.authResolve = null;
+          this.authReject = null;
+        }
+        this.ws?.close(1008, error);
         break;
 
       case 'subscription_confirmed':
