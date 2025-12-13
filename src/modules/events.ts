@@ -219,17 +219,22 @@ export class EventsModule {
 
     return new Promise((resolve, reject) => {
       // Store pending subscription
-      this.pendingSubscriptions.set(subscriptionId, {
-        resolve: (sub) => {
+      // Build object without undefined options (for exactOptionalPropertyTypes)
+      const subscriptionData = options 
+        ? { domain, resource, options }
+        : { domain, resource };
+      
+      const pendingData = {
+        resolve: (sub: Subscription) => {
           // Track for reconnection
-          this.subscriptions.set(sub.id, { domain, resource, options });
+          this.subscriptions.set(sub.id, subscriptionData);
           resolve(sub);
         },
         reject,
-        domain,
-        resource,
-        options
-      });
+        ...subscriptionData
+      };
+      
+      this.pendingSubscriptions.set(subscriptionId, pendingData);
 
       // Send subscribe message
       const message = {
