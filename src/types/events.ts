@@ -134,6 +134,14 @@ export interface ErrorMessage {
 }
 
 /**
+ * Authentication error message (sent when auth fails)
+ */
+export interface AuthErrorMessage {
+  type: 'auth_error';
+  error: string;
+}
+
+/**
  * All possible WebSocket messages from server
  */
 export type WebSocketMessage =
@@ -143,7 +151,8 @@ export type WebSocketMessage =
   | EventNotification
   | SystemNotification
   | PongMessage
-  | ErrorMessage;
+  | ErrorMessage
+  | AuthErrorMessage;
 
 /**
  * Events emitted by the EventsModule
