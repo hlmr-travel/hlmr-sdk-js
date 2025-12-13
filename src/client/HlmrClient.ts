@@ -208,4 +208,52 @@ export class HlmrClient {
   ) {
     return this.httpClient.directRequest<T>(url, method, body, options);
   }
+
+  /**
+   * Faire une requête GET vers un endpoint de l'API
+   * @param path Chemin relatif (ex: /chats/, /chats/{id})
+   * @param options Options de requête (headers, timeout, apiVersion, etc.)
+   */
+  async get<T>(path: string, options?: import('../types/common').RequestOptions) {
+    return this.httpClient.get<T>(path, options);
+  }
+
+  /**
+   * Faire une requête POST vers un endpoint de l'API
+   * @param path Chemin relatif (ex: /chats/)
+   * @param body Corps de la requête
+   * @param options Options de requête (headers, timeout, apiVersion, etc.)
+   */
+  async post<T>(path: string, body?: any, options?: import('../types/common').RequestOptions) {
+    return this.httpClient.post<T>(path, body, options);
+  }
+
+  /**
+   * Faire une requête PUT vers un endpoint de l'API
+   * @param path Chemin relatif (ex: /chats/{id})
+   * @param body Corps de la requête
+   * @param options Options de requête (headers, timeout, apiVersion, etc.)
+   */
+  async put<T>(path: string, body?: any, options?: import('../types/common').RequestOptions) {
+    return this.httpClient.put<T>(path, body, options);
+  }
+
+  /**
+   * Faire une requête PATCH vers un endpoint de l'API
+   * @param path Chemin relatif (ex: /chats/{id})
+   * @param body Corps de la requête
+   * @param options Options de requête (headers, timeout, apiVersion, etc.)
+   */
+  async patch<T>(path: string, body?: any, options?: import('../types/common').RequestOptions) {
+    return this.httpClient.patch<T>(path, body, options);
+  }
+
+  /**
+   * Faire une requête DELETE vers un endpoint de l'API
+   * @param path Chemin relatif (ex: /chats/{id})
+   * @param options Options de requête (headers, timeout, apiVersion, etc.)
+   */
+  async delete<T>(path: string, options?: import('../types/common').RequestOptions) {
+    return this.httpClient.delete<T>(path, options);
+  }
 }
