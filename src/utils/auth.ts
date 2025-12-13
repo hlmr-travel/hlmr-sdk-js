@@ -145,3 +145,8 @@ export function performLogout(options: LogoutOptions = {}): void {
   window.location.replace(finalRedirectUrl);
 }
 
+
+
+
+
+
