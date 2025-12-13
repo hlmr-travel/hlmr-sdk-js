@@ -374,6 +374,33 @@ export class EventsModule {
   }
 
   /**
+   * Send a typing event
+   * 
+   * @param chatId The chat ID
+   * @param event "started" or "stopped"
+   */
+  sendTypingEvent(chatId: string, event: 'started' | 'stopped'): void {
+    if (!this.ws || this.ws.readyState !== WebSocket.OPEN) {
+      if (this.config.debug) {
+        console.warn('[EventsModule] Cannot send typing event: not connected');
+      }
+      return;
+    }
+
+    const message = {
+      type: 'typing_event',
+      chat_id: chatId,
+      event: event
+    };
+
+    this.ws.send(JSON.stringify(message));
+
+    if (this.config.debug) {
+      console.log('[EventsModule] Sent typing event:', message);
+    }
+  }
+
+  /**
    * Get connection status
    */
   get isConnected(): boolean {
