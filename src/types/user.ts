@@ -36,6 +36,38 @@ export interface UserProfile {
   email_confirmed_at?: string;
 }
 
+/**
+ * Settings utilisateur pour une app
+ */
+export interface UserSettings {
+  /** ID de l'utilisateur */
+  user_id: string;
+  
+  /** ID de l'app */
+  app_id: string;
+  
+  /** Settings de l'utilisateur */
+  settings: {
+    /** Code langue (ex: 'fr', 'en') */
+    locale?: string;
+    
+    /** Timezone (ex: 'Europe/Paris') */
+    defaultTimezone?: string;
+    
+    /** Code pays (ex: 'FR') */
+    country_code?: string;
+    
+    /** Autres settings spécifiques à l'app */
+    [key: string]: any;
+  };
+  
+  /** Date de création */
+  created_at?: string;
+  
+  /** Date de dernière mise à jour */
+  updated_at?: string;
+}
+
 
 
 

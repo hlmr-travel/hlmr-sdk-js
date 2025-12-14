@@ -22,7 +22,8 @@ export type {
 } from './types/auth';
 
 export type {
-  UserProfile
+  UserProfile,
+  UserSettings
 } from './types/user';
 
 export type {
