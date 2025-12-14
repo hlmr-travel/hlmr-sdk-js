@@ -92,8 +92,11 @@ export class HttpClient {
     const headers: Record<string, string> = {
       'Content-Type': 'application/json',
       'X-App-ID': this.config.appId,
+      // X-SDK-Referrer par défaut, mais peut être écrasé par customHeaders
       'X-SDK-Referrer': `hlmr-sdk-js@${SDK_VERSION}`,
+      // customHeaders peut écraser X-SDK-Referrer (pour InternalClient)
       ...this.config.customHeaders,
+      // options.headers a la priorité finale
       ...options.headers
     };
 
