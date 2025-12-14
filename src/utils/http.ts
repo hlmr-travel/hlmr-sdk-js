@@ -13,6 +13,7 @@ import type {
 } from '../types/errors';
 import { HlmrApiError } from '../types/errors';
 import { isJSendResponse, isJSendSuccess } from './jsend';
+import { SDK_VERSION } from '../constants';
 
 /**
  * Client HTTP pour les appels API Mira
@@ -91,7 +92,7 @@ export class HttpClient {
     const headers: Record<string, string> = {
       'Content-Type': 'application/json',
       'X-App-ID': this.config.appId,
-      'X-SDK-Referrer': 'hlmr-sdk-js@1.0.6',
+      'X-SDK-Referrer': `hlmr-sdk-js@${SDK_VERSION}`,
       ...this.config.customHeaders,
       ...options.headers
     };

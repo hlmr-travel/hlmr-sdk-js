@@ -79,5 +79,4 @@ export { clearAllCache, preventBackNavigation, performLogout } from './utils/aut
 export type { LogoutOptions } from './utils/auth';
 
 // Version du SDK
-export const SDK_VERSION = '1.0.28';
-export const SDK_NAME = 'hlmr-sdk-js';
+export { SDK_VERSION, SDK_NAME } from './constants';
