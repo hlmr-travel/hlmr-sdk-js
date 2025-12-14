@@ -18,8 +18,21 @@ export class UserModule {
    * @returns Profil utilisateur basique
    */
   async getProfile(): Promise<UserProfile> {
-    const response = await this.http.get<UserProfile>('users/profile');
-    return response.data;
+    const response = await this.http.get<{ user: any }>('users/me');
+    const userData = response.data.user;
+    
+    // Mapper les champs du backend vers le format SDK
+    return {
+      id: userData.user_id,
+      email: userData.email || '',
+      full_name: userData.display_name || userData.public_name,
+      avatar_url: userData.avatar_url,
+      user_metadata: userData.user_metadata || {},
+      created_at: userData.created_at || '',
+      updated_at: userData.updated_at || '',
+      last_sign_in_at: userData.last_sign_in_at,
+      email_confirmed_at: userData.email_verified ? userData.email_confirmed_at || userData.updated_at : undefined
+    };
   }
 
   /**
