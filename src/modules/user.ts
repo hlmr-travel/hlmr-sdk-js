@@ -79,10 +79,15 @@ export class UserModule {
       body
     );
     
-    return {
-      success: true,
-      updated_apps: response.data.updated_apps
+    const result: { success: boolean; updated_apps?: string[] } = {
+      success: true
     };
+    
+    if (response.data.updated_apps !== undefined) {
+      result.updated_apps = response.data.updated_apps;
+    }
+    
+    return result;
   }
 
   /**
