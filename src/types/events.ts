@@ -76,8 +76,8 @@ export interface SystemNotification {
   type: 'system_notification';
   /** Event name (e.g., "token.refresh", "app.update") */
   event: string;
-  /** Domain (always "system") */
-  domain: 'system';
+  /** Domain (e.g., "system", "apps") */
+  domain: string;
   /** Resource type */
   resource: string;
   /** Action to take (e.g., "refresh_token", "update_app") */

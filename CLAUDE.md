@@ -19,6 +19,9 @@ SDK JavaScript/TypeScript public pour l'API Mira. Point d'acces unique pour tous
 - **AuthModule** : bearerToken, refresh
 - Chaque module correspond a un microservice backend
 
+## Types importants
+- `SystemNotification.domain` est `string` (pas seulement `'system'`) car les targeted notifications peuvent venir de n'importe quel domaine (ex: `'apps'`)
+
 ## IMPORTANT
 - Ce SDK est utilise par chat-web, mira-sign, console-dev, idp-front
 - AVANT d'ajouter un `fetch` direct dans un frontend, VERIFIER si un module/methode existe ici
