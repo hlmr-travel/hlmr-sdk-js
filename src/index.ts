@@ -81,3 +81,11 @@ export type { LogoutOptions } from './utils/auth';
 
 // Version du SDK
 export { SDK_VERSION, SDK_NAME } from './constants';
+
+// Supabase client unifié
+export {
+  getSupabaseClient,
+  resetSupabaseClient,
+  getSupabaseClientConfig
+} from './lib/supabaseClient';
+export type { SupabaseClientOptions } from './lib/supabaseClient';
