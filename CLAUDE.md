@@ -15,9 +15,15 @@ SDK JavaScript/TypeScript public pour l'API Mira. Point d'acces unique pour tous
 
 ## Modules cles
 - **EventsModule** : WebSocket, subscriptions par domaine/resource, `system_notification`, auto-reconnect
+  - `setBearerToken(token)` : met a jour le token WS sans recreer le module. Appele automatiquement par `HlmrClient.setBearerToken()` et `clearBearerToken()`. Le token est utilise au prochain reconnect (la connexion active n'est pas affectee).
 - **AppsModule** : install/uninstall apps, scopes
 - **AuthModule** : bearerToken, refresh
 - Chaque module correspond a un microservice backend
+
+## Token refresh pattern
+- `HlmrClient.setBearerToken()` propage le token a `HttpClient` ET `EventsModule`
+- Les frontends utilisent un singleton stable (`useMemo([])`) et mettent a jour le token via `useEffect([bearerToken])`
+- NE PAS recreer le client sur token refresh — utiliser `setBearerToken()` sur l'instance existante
 
 ## Types importants
 - `SystemNotification.domain` est `string` (pas seulement `'system'`) car les targeted notifications peuvent venir de n'importe quel domaine (ex: `'apps'`)

@@ -89,6 +89,15 @@ export class EventsModule {
   private authResolve: ((msg: ConnectedMessage) => void) | null = null;
   private authReject: ((err: Error) => void) | null = null;
 
+  /**
+   * Update the bearer token used for WebSocket authentication.
+   * Called when Supabase auto-refreshes the JWT.
+   * The new token will be used for the next reconnect.
+   */
+  setBearerToken(token: string | null): void {
+    this.bearerToken = token;
+  }
+
   constructor(http: HttpClient, config?: EventsModuleConfig) {
     this.http = http;
     this.config = { ...DEFAULT_CONFIG, ...config };

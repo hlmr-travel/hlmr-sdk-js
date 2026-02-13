@@ -95,6 +95,7 @@ export class HlmrClient {
       throw HlmrApiError.configError('Bearer token must be a non-empty string');
     }
     this.httpClient.setBearerToken(token);
+    this.events.setBearerToken(token);
   }
 
   /**
@@ -102,6 +103,7 @@ export class HlmrClient {
    */
   clearBearerToken(): void {
     this.httpClient.clearBearerToken();
+    this.events.setBearerToken(null);
   }
 
   /**
