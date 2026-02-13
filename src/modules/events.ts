@@ -178,7 +178,7 @@ export class EventsModule {
             this.isConnecting = false;
             this.authResolve = null;
             this.authReject = null;
-            this.ws!.close(1008, 'Missing authentication token');
+            this.ws!.close(4008, 'Missing authentication token');
             reject(new Error('Missing authentication token'));
           }
         };
