@@ -131,6 +131,9 @@ export type {
   PublicDocumentsListParams,
 } from './types/public';
 
+// Ledger module
+export { LedgerModule } from './modules/ledger';
+
 // Ledger types
 export type {
   WalletType,

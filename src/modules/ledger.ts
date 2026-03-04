@@ -1,0 +1,86 @@
+import type { HttpClient } from '../utils/http';
+import type {
+  Wallet,
+  Transaction,
+  WalletsList,
+  WalletsListParams,
+  TransactionsList,
+  TransactionsListParams,
+  InvariantCheck,
+  BalanceHistoryList,
+  BalanceHistoryParams,
+  WalletStats,
+  TransactionStats,
+  TransactionStatsParams,
+} from '../types/ledger';
+
+export class LedgerModule {
+  protected http: HttpClient;
+
+  constructor(http: HttpClient) {
+    this.http = http;
+  }
+
+  async getInvariant(): Promise<InvariantCheck> {
+    const response = await this.http.get<InvariantCheck>('ledger/health/invariant');
+    return response.data;
+  }
+
+  async getWallets(params?: WalletsListParams): Promise<WalletsList> {
+    const query = buildQueryString(params);
+    const path = query ? `ledger/wallets?${query}` : 'ledger/wallets';
+    const response = await this.http.get<WalletsList>(path);
+    return response.data;
+  }
+
+  async getWallet(walletId: string): Promise<Wallet> {
+    const response = await this.http.get<{ wallet: Wallet }>(`ledger/wallets/${walletId}`);
+    return response.data.wallet;
+  }
+
+  async getBalanceHistory(walletId: string, params?: BalanceHistoryParams): Promise<BalanceHistoryList> {
+    const query = buildQueryString(params);
+    const path = query
+      ? `ledger/wallets/${walletId}/balance-history?${query}`
+      : `ledger/wallets/${walletId}/balance-history`;
+    const response = await this.http.get<BalanceHistoryList>(path);
+    return response.data;
+  }
+
+  async getTransactions(params?: TransactionsListParams): Promise<TransactionsList> {
+    const query = buildQueryString(params);
+    const path = query ? `ledger/transactions?${query}` : 'ledger/transactions';
+    const response = await this.http.get<TransactionsList>(path);
+    return response.data;
+  }
+
+  async getTransaction(transactionId: string): Promise<Transaction> {
+    const response = await this.http.get<{ transaction: Transaction }>(
+      `ledger/transactions/${transactionId}`,
+    );
+    return response.data.transaction;
+  }
+
+  async getWalletStats(): Promise<WalletStats> {
+    const response = await this.http.get<WalletStats>('ledger/stats/wallets');
+    return response.data;
+  }
+
+  async getTransactionStats(params?: TransactionStatsParams): Promise<TransactionStats> {
+    const query = buildQueryString(params);
+    const path = query ? `ledger/stats/transactions?${query}` : 'ledger/stats/transactions';
+    const response = await this.http.get<TransactionStats>(path);
+    return response.data;
+  }
+}
+
+function buildQueryString(params?: Record<string, any>): string {
+  if (!params) return '';
+  const searchParams = new URLSearchParams();
+  for (const [key, value] of Object.entries(params)) {
+    if (value !== undefined && value !== null) {
+      searchParams.append(key, String(value));
+    }
+  }
+  return searchParams.toString();
+}
