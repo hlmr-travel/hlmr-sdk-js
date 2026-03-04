@@ -131,6 +131,35 @@ export type {
   PublicDocumentsListParams,
 } from './types/public';
 
+// Ledger types
+export type {
+  WalletType,
+  WalletStatus,
+  HostingPhase,
+  Currency,
+  TransactionStatus,
+  TransactionLabel,
+  Wallet,
+  Transaction,
+  WalletCreate,
+  TransactionCreate,
+  WalletsListParams,
+  TransactionsListParams,
+  TransactionStatsParams,
+  BalanceHistoryParams,
+  WalletsList,
+  TransactionsList,
+  InvariantCheck,
+  BalanceHistoryEntry,
+  BalanceHistoryList,
+  WalletStatsByType,
+  WalletStatsByStatus,
+  WalletStats,
+  TransactionStatsByStatus,
+  TransactionStatsByPeriod,
+  TransactionStats,
+} from './types/ledger';
+
 // Classes d'erreur (valeurs)
 export { HlmrApiError } from './types/errors';
 
