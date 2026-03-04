@@ -2,7 +2,7 @@
  * SDK JavaScript officiel pour l'API Mira
  * Routes publiques uniquement - Version publique
  * 
- * @version 1.0.0
+ * @version 1.1.0
  * @author CES Venture (Hello Mira)
  */
 
