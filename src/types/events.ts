@@ -12,6 +12,8 @@ export interface SubscriptionFilters {
   trip_ids?: string[];
   /** Filter by specific user IDs (for user domain) */
   user_ids?: string[];
+  /** Filter by specific booking IDs (for booking domain) */
+  booking_ids?: string[];
   /** Filter by specific event types (e.g., ["created", "updated"]) */
   events?: string[];
 }

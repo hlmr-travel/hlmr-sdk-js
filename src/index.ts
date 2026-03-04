@@ -39,6 +39,12 @@ export type {
 
 export { AppsModule } from './modules/apps';
 
+// New modules (booking flow)
+export { PublicModule } from './modules/public';
+export { OffersModule } from './modules/offers';
+export { PricingModule } from './modules/pricing';
+export { BookingModule } from './modules/booking';
+
 // Events module (WebSocket)
 export { EventsModule } from './modules/events';
 
@@ -56,6 +62,74 @@ export type {
   EventsModuleConfig,
   EventsModuleEvents
 } from './types/events';
+
+// Offers types
+export type {
+  OfferStatus,
+  AccommodationTierEnum,
+  TermTypeEnum,
+  OfferSeason,
+  OfferAccommodationTier,
+  OfferFlightTier,
+  OfferDurationDiscount,
+  OfferTerm,
+  OfferEligibility,
+  PublicOffer,
+  PublicOfferDetail,
+  Offer,
+  PublicOffersList,
+  OffersList,
+  PublicOffersListParams,
+  OffersListParams,
+} from './types/offers';
+
+// Pricing types
+export type {
+  PriceStep,
+  PriceBreakdown,
+  PaymentInstallmentPreview,
+  PaymentOption,
+  PriceEstimate,
+  PriceEstimateParams,
+} from './types/pricing';
+
+// Booking types
+export type {
+  BookingState,
+  BookingType,
+  PaymentMode,
+  RequirementType,
+  RequirementStatus,
+  InstallmentStatus,
+  PricingSnapshot,
+  BookingRequirement,
+  BookingInstallment,
+  BookingEvent,
+  Booking,
+  BookingDetail,
+  CancellationResult,
+  BookingExtension,
+  BookingsList,
+  CreateBookingParams,
+  UpdateBookingOptionsParams,
+  CancelBookingParams,
+  ExtendBookingParams,
+  BookingsListParams,
+} from './types/booking';
+
+// Public types (geo, terms)
+export type {
+  PublicDestination,
+  PublicCity,
+  PublicDocumentSummary,
+  PublicDocument,
+  PublicDestinationsList,
+  PublicCitiesList,
+  PublicDocumentsList,
+  PublicDestinationsListParams,
+  PublicCitiesListParams,
+  PublicDocumentsListParams,
+} from './types/public';
 
 // Classes d'erreur (valeurs)
 export { HlmrApiError } from './types/errors';

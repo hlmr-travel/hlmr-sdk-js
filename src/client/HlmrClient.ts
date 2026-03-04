@@ -16,6 +16,10 @@ import { UserModule } from '../modules/user';
 import { SystemModule } from '../modules/system';
 import { AppsModule } from '../modules/apps';
 import { EventsModule } from '../modules/events';
+import { PublicModule } from '../modules/public';
+import { OffersModule } from '../modules/offers';
+import { PricingModule } from '../modules/pricing';
+import { BookingModule } from '../modules/booking';
 import type { EventsModuleConfig } from '../types/events';
 
 /**
@@ -39,16 +43,32 @@ export class HlmrClient {
   /** Module événements temps réel (WebSocket) */
   public readonly events: EventsModule;
 
+  /** Module routes publiques (sans JWT) */
+  public readonly publicApi: PublicModule;
+
+  /** Module offres authentifiées */
+  public readonly offers: OffersModule;
+
+  /** Module estimation de prix */
+  public readonly pricing: PricingModule;
+
+  /** Module réservations */
+  public readonly booking: BookingModule;
+
   constructor(options: HlmrClientOptions & { eventsConfig?: EventsModuleConfig }) {
     const config = this.buildConfig(options);
     this.httpClient = new HttpClient(config);
-    
+
     // Initialiser les modules
     this.auth = new AuthModule(this.httpClient);
     this.user = new UserModule(this.httpClient);
     this.system = new SystemModule(this.httpClient);
     this.apps = new AppsModule(this.httpClient);
     this.events = new EventsModule(this.httpClient, options.eventsConfig);
+    this.publicApi = new PublicModule(this.httpClient);
+    this.offers = new OffersModule(this.httpClient);
+    this.pricing = new PricingModule(this.httpClient);
+    this.booking = new BookingModule(this.httpClient);
   }
 
   /**

@@ -1,0 +1,149 @@
+// Types for booking module
+
+// Enums
+
+export type BookingState = 'intent' | 'quoted' | 'pending' | 'confirming' | 'confirmed' | 'cancelled';
+
+export type BookingType = 'standard' | 'extension';
+
+export type PaymentMode = 'oneshot' | 'monthly';
+
+export type RequirementType = 'terms_acceptance' | 'mira_pass' | 'passport_kyc' | 'deposit_funded';
+
+export type RequirementStatus = 'pending' | 'completed' | 'waived';
+
+export type InstallmentStatus = 'pending' | 'paid' | 'overdue' | 'failed';
+
+// Sub-entities
+
+export interface PricingSnapshot {
+  total: number;
+  deposit_target: number;
+  breakdown: { [key: string]: any };
+  payment_options: { mode: string; total: number; discount_applied?: number; installments?: any[] }[];
+  integrity_hash: string;
+  expires_at: string;
+}
+
+export interface BookingRequirement {
+  id: string;
+  booking_id: string;
+  type: RequirementType;
+  status: RequirementStatus;
+  completed_at?: string;
+  metadata?: { [key: string]: any };
+}
+
+export interface BookingInstallment {
+  id: string;
+  booking_id: string;
+  due_date: string;
+  amount: number;
+  label: string;
+  status: InstallmentStatus;
+  paid_at?: string;
+  payment_source?: string;
+}
+
+export interface BookingEvent {
+  id: string;
+  booking_id: string;
+  event_type: string;
+  actor_type: 'user' | 'admin' | 'system';
+  actor_id: string;
+  metadata?: { [key: string]: any };
+  created_at: string;
+}
+
+// Core booking
+
+export interface Booking {
+  id: string;
+  type: BookingType;
+  parent_booking_id?: string;
+  user_id: string;
+  offer_id: string;
+  status: BookingState;
+  start_date: string;
+  duration_days: number;
+  accommodation_tier: string;
+  departure_city: string;
+  travelers: number;
+  room_sharing: boolean;
+  payment_mode: PaymentMode;
+  payment_method_id?: string;
+  pricing_snapshot?: PricingSnapshot | null;
+  deposit_id?: string;
+  trip_id?: string;
+  cancel_reason?: string;
+  cancellation_fee?: number;
+  expires_at?: string;
+  quoted_at?: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface BookingDetail extends Booking {
+  requirements: BookingRequirement[];
+  installments: BookingInstallment[];
+  events: BookingEvent[];
+}
+
+// Action results
+
+export interface CancellationResult {
+  booking_id: string;
+  status: 'cancelled';
+  cancellation_fee: number;
+  refund_amount: number;
+  refund_tx_id?: string;
+}
+
+export interface BookingExtension {
+  booking: Booking;
+  parent_booking_id: string;
+}
+
+// Paginated response
+
+export interface BookingsList {
+  bookings: Booking[];
+  total: number;
+  page: number;
+  page_size: number;
+}
+
+// Request params
+
+export interface CreateBookingParams {
+  offer_id: string;
+  start_date: string;
+  duration_days: number;
+  accommodation_tier: string;
+  departure_city: string;
+  travelers: number;
+  room_sharing: boolean;
+  payment_mode: PaymentMode;
+}
+
+export interface UpdateBookingOptionsParams {
+  accommodation_tier?: string;
+  departure_city?: string;
+  travelers?: number;
+  room_sharing?: boolean;
+  payment_mode?: PaymentMode;
+}
+
+export interface CancelBookingParams {
+  reason: string;
+}
+
+export interface ExtendBookingParams {
+  extra_days: number;
+}
+
+export interface BookingsListParams {
+  page?: number;
+  page_size?: number;
+  status?: BookingState;
+}
