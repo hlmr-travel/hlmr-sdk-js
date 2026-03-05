@@ -160,6 +160,7 @@ export type {
   WalletStats,
   TransactionStatsByStatus,
   TransactionStatsByPeriod,
+  TransactionStatsByPeriodLabel,
   TransactionStats,
 } from './types/ledger';
 

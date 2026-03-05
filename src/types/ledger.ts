@@ -22,20 +22,38 @@ export type Currency = 'EUR';
 export type TransactionStatus = 'pending' | 'done' | 'cancelled' | 'failed';
 
 export type TransactionLabel =
-  | 'top_up'
+  // Entrées
+  | 'user_topup'
+  | 'gift_topup'
+  // Abonnement
   | 'subscription_payment'
+  | 'subscription_fee'
+  // Voyage
   | 'trip_funding'
+  | 'travel_flight_payment'
+  | 'travel_accommodation_payment'
   | 'trip_expense'
-  | 'activity_payment'
-  | 'deposit_collection'
-  | 'deposit_release'
-  | 'credit_grant'
-  | 'credit_usage'
+  // Dépôt
+  | 'deposit_funding'
+  | 'deposit_refund'
+  | 'deposit_advance'
+  | 'deposit_reconstitution'
+  | 'deposit_debt_compensation'
+  | 'deposit_loss_writeoff'
+  // Crédits
+  | 'credit_injection'
+  | 'credit_expired'
+  // Activités
+  | 'activity_funding'
+  | 'activity_markup'
+  | 'activity_closure'
+  // Autres
   | 'withdrawal'
-  | 'payout'
-  | 'intercompany_transfer'
-  | 'migration'
-  | 'closure_sweep'
+  | 'wallet_hosting_migration'
+  | 'intercompany_treasury_advance'
+  | 'intercompany_treasury_reimbursement'
+  | 'trip_closure_margin'
+  | 'subsidiary_daily_payout'
   | string;
 
 // ── Core entities ──────────────────────────────────────────────────
@@ -147,6 +165,7 @@ export interface TransactionsListParams {
   linked_group?: string;
   date_from?: string;
   date_to?: string;
+  sort?: string;
 }
 
 export interface TransactionStatsParams {
@@ -233,8 +252,16 @@ export interface TransactionStatsByPeriod {
   volume: number;
 }
 
+export interface TransactionStatsByPeriodLabel {
+  date: string;
+  label: string;
+  count: number;
+  volume: number;
+}
+
 export interface TransactionStats {
   by_status: TransactionStatsByStatus[];
   total_volume_done: number;
   by_period: TransactionStatsByPeriod[];
+  by_period_label?: TransactionStatsByPeriodLabel[];
 }
