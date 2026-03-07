@@ -76,6 +76,7 @@ export interface Wallet {
   provider_id?: string | null;
   provider_wallet_id?: string | null;
   min_balance?: number | null;
+  company_id?: string | null;
   created_at: string;
   updated_at: string;
 }

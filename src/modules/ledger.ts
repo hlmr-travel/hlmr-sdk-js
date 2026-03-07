@@ -6,12 +6,8 @@ import type {
   WalletsListParams,
   TransactionsList,
   TransactionsListParams,
-  InvariantCheck,
   BalanceHistoryList,
   BalanceHistoryParams,
-  WalletStats,
-  TransactionStats,
-  TransactionStatsParams,
 } from '../types/ledger';
 
 export class LedgerModule {
@@ -19,11 +15,6 @@ export class LedgerModule {
 
   constructor(http: HttpClient) {
     this.http = http;
-  }
-
-  async getInvariant(): Promise<InvariantCheck> {
-    const response = await this.http.get<InvariantCheck>('ledger/health/invariant');
-    return response.data;
   }
 
   async getWallets(params?: WalletsListParams): Promise<WalletsList> {
@@ -61,17 +52,6 @@ export class LedgerModule {
     return response.data.transaction;
   }
 
-  async getWalletStats(): Promise<WalletStats> {
-    const response = await this.http.get<WalletStats>('ledger/stats/wallets');
-    return response.data;
-  }
-
-  async getTransactionStats(params?: TransactionStatsParams): Promise<TransactionStats> {
-    const query = buildQueryString(params);
-    const path = query ? `ledger/stats/transactions?${query}` : 'ledger/stats/transactions';
-    const response = await this.http.get<TransactionStats>(path);
-    return response.data;
-  }
 }
 
 function buildQueryString(params?: Record<string, any>): string {
