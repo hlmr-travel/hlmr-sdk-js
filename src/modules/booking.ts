@@ -13,6 +13,11 @@ import type {
   BookingExtension,
   RequirementType,
 } from '../types/booking';
+import type {
+  PayBookingParams,
+  PaymentLinkResult,
+  RenewPaymentLinkResult,
+} from '../types/payment';
 
 export class BookingModule {
   private http: HttpClient;
@@ -86,6 +91,21 @@ export class BookingModule {
   async confirmExtension(bookingId: string): Promise<Booking> {
     const response = await this.http.post<Booking>(
       `booking/bookings/${bookingId}/confirm-extension`,
+    );
+    return response.data;
+  }
+
+  async pay(bookingId: string, params?: PayBookingParams): Promise<PaymentLinkResult> {
+    const response = await this.http.post<PaymentLinkResult>(
+      `booking/bookings/${bookingId}/pay`,
+      params ?? { scope: 'all' },
+    );
+    return response.data;
+  }
+
+  async renewPaymentLink(paymentLinkId: string): Promise<RenewPaymentLinkResult> {
+    const response = await this.http.post<RenewPaymentLinkResult>(
+      `payment/links/${paymentLinkId}/renew`,
     );
     return response.data;
   }

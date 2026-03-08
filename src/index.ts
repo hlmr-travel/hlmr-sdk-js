@@ -131,6 +131,23 @@ export type {
   PublicDocumentsListParams,
 } from './types/public';
 
+// Payment module
+export { PaymentModule } from './modules/payment';
+
+// Payment types
+export type {
+  PaymentScope,
+  PaymentLinkStatus,
+  PayerType,
+  PaymentLinkResult,
+  PaymentLinkInfo,
+  PaymentLinkBookingSummary,
+  PaymentLinkStatusInfo,
+  PaymentLink,
+  PayBookingParams,
+  RenewPaymentLinkResult,
+} from './types/payment';
+
 // Ledger module
 export { LedgerModule } from './modules/ledger';
 
