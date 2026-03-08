@@ -15,10 +15,10 @@ export class PaymentModule {
     this.http = http;
   }
 
-  /** Get public info of a payment link (no auth required). */
+  /** Get public info of a payment link (no auth required, token sent if available). */
   async getLink(token: string): Promise<PaymentLinkInfo> {
     const response = await this.http.get<PaymentLinkInfo>(
-      `payment/links/${token}`,
+      `payment/public/links/${token}`,
       { skipAuth: true },
     );
     return response.data;
@@ -27,7 +27,7 @@ export class PaymentModule {
   /** Get status of a payment link (no auth required). */
   async getLinkStatus(token: string): Promise<PaymentLinkStatusInfo> {
     const response = await this.http.get<PaymentLinkStatusInfo>(
-      `payment/links/${token}/status`,
+      `payment/public/links/${token}/status`,
       { skipAuth: true },
     );
     return response.data;
