@@ -9,8 +9,6 @@ import type {
   UpdateBookingOptionsParams,
   CancelBookingParams,
   ExtendBookingParams,
-  CancellationResult,
-  BookingExtension,
   RequirementType,
 } from '../types/booking';
 import type {
@@ -27,30 +25,30 @@ export class BookingModule {
   }
 
   async create(params: CreateBookingParams): Promise<Booking> {
-    const response = await this.http.post<Booking>('booking/bookings', params);
-    return response.data;
+    const response = await this.http.post<{ booking: Booking }>('booking/bookings', params);
+    return response.data.booking;
   }
 
-  async quote(bookingId: string): Promise<Booking> {
-    const response = await this.http.post<Booking>(`booking/bookings/${bookingId}/quote`);
-    return response.data;
+  async quote(bookingId: string): Promise<any> {
+    const response = await this.http.post<{ quote: any }>(`booking/bookings/${bookingId}/quote`);
+    return response.data.quote;
   }
 
   async updateOptions(bookingId: string, options: UpdateBookingOptionsParams): Promise<Booking> {
-    const response = await this.http.put<Booking>(`booking/bookings/${bookingId}/options`, options);
-    return response.data;
+    const response = await this.http.put<{ booking: Booking }>(`booking/bookings/${bookingId}/options`, options);
+    return response.data.booking;
   }
 
-  async confirmQuote(bookingId: string): Promise<Booking> {
-    const response = await this.http.post<Booking>(`booking/bookings/${bookingId}/confirm-quote`);
-    return response.data;
+  async confirmQuote(bookingId: string): Promise<BookingDetail> {
+    const response = await this.http.post<{ booking: BookingDetail }>(`booking/bookings/${bookingId}/confirm-quote`);
+    return response.data.booking;
   }
 
   async checkRequirement(bookingId: string, type: RequirementType): Promise<BookingRequirement> {
-    const response = await this.http.post<BookingRequirement>(
+    const response = await this.http.post<{ requirement: BookingRequirement }>(
       `booking/bookings/${bookingId}/requirements/${type}/check`,
     );
-    return response.data;
+    return response.data.requirement;
   }
 
   async list(params?: BookingsListParams): Promise<BookingsList> {
@@ -61,38 +59,38 @@ export class BookingModule {
   }
 
   async get(bookingId: string): Promise<BookingDetail> {
-    const response = await this.http.get<BookingDetail>(`booking/bookings/${bookingId}`);
-    return response.data;
+    const response = await this.http.get<{ booking: BookingDetail }>(`booking/bookings/${bookingId}`);
+    return response.data.booking;
   }
 
   async getRequirements(bookingId: string): Promise<BookingRequirement[]> {
-    const response = await this.http.get<BookingRequirement[]>(
+    const response = await this.http.get<{ requirements: BookingRequirement[] }>(
       `booking/bookings/${bookingId}/requirements`,
     );
-    return response.data;
+    return response.data.requirements;
   }
 
-  async cancel(bookingId: string, params: CancelBookingParams): Promise<CancellationResult> {
-    const response = await this.http.post<CancellationResult>(
+  async cancel(bookingId: string, params: CancelBookingParams): Promise<BookingDetail> {
+    const response = await this.http.post<{ booking: BookingDetail }>(
       `booking/bookings/${bookingId}/cancel`,
       params,
     );
-    return response.data;
+    return response.data.booking;
   }
 
-  async extend(bookingId: string, params: ExtendBookingParams): Promise<BookingExtension> {
-    const response = await this.http.post<BookingExtension>(
+  async extend(bookingId: string, params: ExtendBookingParams): Promise<BookingDetail> {
+    const response = await this.http.post<{ booking: BookingDetail }>(
       `booking/bookings/${bookingId}/extend`,
       params,
     );
-    return response.data;
+    return response.data.booking;
   }
 
-  async confirmExtension(bookingId: string): Promise<Booking> {
-    const response = await this.http.post<Booking>(
+  async confirmExtension(bookingId: string): Promise<BookingDetail> {
+    const response = await this.http.post<{ booking: BookingDetail }>(
       `booking/bookings/${bookingId}/confirm-extension`,
     );
-    return response.data;
+    return response.data.booking;
   }
 
   async pay(bookingId: string, params?: PayBookingParams): Promise<PaymentLinkResult> {
