@@ -6,7 +6,8 @@
 import type { HttpClient } from '../utils/http';
 import type {
   AuthValidateRedirectRequest,
-  AuthValidateRedirectResponse
+  AuthValidateRedirectResponse,
+  ExchangeRedirectTokenResponse
 } from '../types/auth';
 
 /**
@@ -17,7 +18,7 @@ export class AuthModule {
 
   /**
    * Valider un redirect URI OAuth pour une application
-   * 
+   *
    * @param appId ID de l'application cliente
    * @param redirectUri URI de redirection à valider
    * @returns Résultat de la validation
@@ -39,13 +40,30 @@ export class AuthModule {
 
     return response.data;
   }
+
+  /**
+   * Échanger un redirect_token contre les vrais tokens (access_token + refresh_token).
+   *
+   * Après l'appel, le front doit :
+   * 1. `await supabase.auth.setSession({ access_token, refresh_token })`
+   * 2. Si `scopes_refreshed === true` : `await supabase.auth.refreshSession()`
+   *    (les scopes ont été recalculés côté serveur, le JWT initial est stale)
+   *
+   * @param redirectToken Le redirect_token reçu dans le fragment de l'URL callback
+   * @returns Tokens + flag scopes_refreshed
+   */
+  async exchangeRedirectToken(
+    redirectToken: string
+  ): Promise<ExchangeRedirectTokenResponse> {
+    const response = await this.http.post<ExchangeRedirectTokenResponse>(
+      'auth/exchange',
+      { redirect_token: redirectToken },
+      { skipAuth: true } // Pas de JWT avant l'échange
+    );
+
+    return {
+      ...response.data,
+      scopes_refreshed: response.data.scopes_refreshed === true,
+    };
+  }
 }
-
-
-
-
-
-
-
-
-

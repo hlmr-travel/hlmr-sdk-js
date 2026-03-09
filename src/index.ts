@@ -18,7 +18,8 @@ export type {
 
 export type {
   AuthValidateRedirectRequest,
-  AuthValidateRedirectResponse
+  AuthValidateRedirectResponse,
+  ExchangeRedirectTokenResponse
 } from './types/auth';
 
 export type {
