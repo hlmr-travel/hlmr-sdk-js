@@ -1,8 +1,12 @@
 import type { HttpClient } from '../utils/http';
 import type {
+  ConfirmPaymentParams,
+  ConfirmPaymentResult,
+  CreatePaymentIntentParams,
   CreatePaymentLinkParams,
   FreePaymentLinkResult,
   ListPaymentLinksParams,
+  PaymentIntentResult,
   PaymentLinkInfo,
   PaymentLinkStatusInfo,
   PaymentLinksList,
@@ -28,6 +32,26 @@ export class PaymentModule {
   async getLinkStatus(token: string): Promise<PaymentLinkStatusInfo> {
     const response = await this.http.get<PaymentLinkStatusInfo>(
       `payment/public/links/${token}/status`,
+      { skipAuth: true },
+    );
+    return response.data;
+  }
+
+  /** Create a Stripe PaymentIntent for a payment link (no auth required). */
+  async createIntent(token: string, params: CreatePaymentIntentParams): Promise<PaymentIntentResult> {
+    const response = await this.http.post<PaymentIntentResult>(
+      `payment/public/links/${token}/intent`,
+      params,
+      { skipAuth: true },
+    );
+    return response.data;
+  }
+
+  /** Confirm a payment after Stripe PI succeeded (no auth required). */
+  async confirmPayment(token: string, params: ConfirmPaymentParams): Promise<ConfirmPaymentResult> {
+    const response = await this.http.post<ConfirmPaymentResult>(
+      `payment/public/links/${token}/confirm`,
+      params,
       { skipAuth: true },
     );
     return response.data;

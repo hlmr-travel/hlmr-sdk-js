@@ -127,6 +127,32 @@ export interface PaymentLink {
   updated_at: string;
 }
 
+// Params for creating a Stripe PaymentIntent on a payment link
+export interface CreatePaymentIntentParams {
+  payer_email: string;
+  payer_name: string;
+  amount?: number;
+}
+
+// Result of creating a Stripe PaymentIntent
+export interface PaymentIntentResult {
+  client_secret: string;
+  stripe_payment_intent_id: string;
+  amount: number;
+  currency: string;
+}
+
+// Params for confirming a payment on a payment link
+export interface ConfirmPaymentParams {
+  stripe_payment_intent_id: string;
+}
+
+// Result of confirming a payment
+export interface ConfirmPaymentResult {
+  status: PaymentLinkStatus;
+  completed_at: string | null;
+}
+
 // Request params for booking.pay()
 export interface PayBookingParams {
   scope?: PaymentScope;

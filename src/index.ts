@@ -164,6 +164,10 @@ export type {
   PaymentLinkBookingSummary,
   PaymentLinkStatusInfo,
   PaymentLink,
+  CreatePaymentIntentParams,
+  PaymentIntentResult,
+  ConfirmPaymentParams,
+  ConfirmPaymentResult,
   PayBookingParams,
   RenewPaymentLinkResult,
 } from './types/payment';

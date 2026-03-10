@@ -23,7 +23,7 @@ SDK JavaScript/TypeScript public pour l'API Mira. Point d'acces unique pour tous
 - **PublicModule** : destinations, villes, termes, recherche offres (`searchOffers`)
 - **OffersModule** : CRUD offres (admin)
 - **PricingModule** : estimations de prix
-- **PaymentModule** : liens de paiement, renew
+- **PaymentModule** : liens de paiement (`getLink`, `getLinkStatus`, `createIntent`, `confirmPayment`, `createLink`, `cancelLink`, `listLinks`)
 - **LedgerModule** : wallets, transactions
 - Chaque module correspond a un microservice backend
 
