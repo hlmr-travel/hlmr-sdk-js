@@ -119,6 +119,10 @@ export type {
   OptionStatus,
   BookingOption,
   CreateOptionParams,
+  CancelPreviewAlertSeverity,
+  CancelPreviewAlert,
+  LinkedBookingPreview,
+  CancelPreviewResult,
 } from './types/booking';
 
 // Public types (geo, terms)

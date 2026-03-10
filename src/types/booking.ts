@@ -182,3 +182,35 @@ export interface BookingOption {
 export interface CreateOptionParams {
   masterclass_id: string;
 }
+
+// Cancel preview (dry-run)
+
+export type CancelPreviewAlertSeverity = 'info' | 'warning' | 'danger';
+
+export interface CancelPreviewAlert {
+  type: string;
+  severity: CancelPreviewAlertSeverity;
+  message: string;
+  booking_ids?: string[];
+}
+
+export interface LinkedBookingPreview {
+  id: string;
+  type: BookingType;
+  status: BookingState;
+  offer_id: string;
+  can_detach: boolean;
+  cancellation_fee: number;
+  refund_amount: number;
+}
+
+export interface CancelPreviewResult {
+  booking_id: string;
+  booking_type: BookingType;
+  status: BookingState;
+  cancellation_fee: number;
+  amount_paid: number;
+  refund_amount: number;
+  linked_bookings: LinkedBookingPreview[];
+  alerts: CancelPreviewAlert[];
+}

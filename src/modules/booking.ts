@@ -6,6 +6,7 @@ import type {
   BookingRequirement,
   BookingsList,
   BookingsListParams,
+  CancelPreviewResult,
   CreateBookingParams,
   CreateOptionParams,
   UpdateBookingOptionsParams,
@@ -70,6 +71,13 @@ export class BookingModule {
       `booking/bookings/${bookingId}/requirements`,
     );
     return response.data.requirements;
+  }
+
+  async cancelPreview(bookingId: string): Promise<CancelPreviewResult> {
+    const response = await this.http.post<CancelPreviewResult>(
+      `booking/bookings/${bookingId}/cancel-preview`,
+    );
+    return response.data;
   }
 
   async cancel(bookingId: string, params: CancelBookingParams): Promise<BookingDetail> {
