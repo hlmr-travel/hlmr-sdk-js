@@ -84,6 +84,10 @@ export type {
   OffersList,
   PublicOffersListParams,
   OffersListParams,
+  OfferSortBy,
+  SortOrder,
+  SearchOffersParams,
+  SearchOffersResult,
 } from './types/offers';
 
 // Pricing types

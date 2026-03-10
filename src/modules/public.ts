@@ -3,6 +3,8 @@ import type {
   PublicOffersList,
   PublicOffersListParams,
   PublicOfferDetail,
+  SearchOffersParams,
+  SearchOffersResult,
 } from '../types/offers';
 import type {
   PublicDestinationsList,
@@ -25,6 +27,13 @@ export class PublicModule {
     const query = buildQueryString(params);
     const path = query ? `offers/public/offers?${query}` : 'offers/public/offers';
     const response = await this.http.get<PublicOffersList>(path, { skipAuth: true });
+    return response.data;
+  }
+
+  async searchOffers(params?: SearchOffersParams): Promise<SearchOffersResult> {
+    const query = buildQueryString(params);
+    const path = query ? `offers/public/offers/search?${query}` : 'offers/public/offers/search';
+    const response = await this.http.get<SearchOffersResult>(path, { skipAuth: true });
     return response.data;
   }
 

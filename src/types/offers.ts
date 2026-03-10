@@ -132,6 +132,30 @@ export interface PublicOffersListParams {
   offer_type?: OfferType | 'all';
 }
 
+export type OfferSortBy = 'created_at' | 'price_per_day' | 'title';
+export type SortOrder = 'asc' | 'desc';
+
+export interface SearchOffersParams {
+  q?: string;
+  offer_type?: OfferType | 'all';
+  country?: string;
+  min_days?: number;
+  max_days?: number;
+  max_price_per_day?: number;
+  sort_by?: OfferSortBy;
+  sort_order?: SortOrder;
+  page?: number;
+  page_size?: number;
+}
+
+export interface SearchOffersResult {
+  offers: PublicOffer[];
+  total: number;
+  page: number;
+  page_size: number;
+  query?: string;
+}
+
 export interface OffersListParams {
   page?: number;
   page_size?: number;
