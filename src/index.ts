@@ -24,7 +24,8 @@ export type {
 
 export type {
   UserProfile,
-  UserSettings
+  UserSettings,
+  ProfileUpdateParams
 } from './types/user';
 
 export type {

@@ -4,7 +4,7 @@
  */
 
 import type { HttpClient } from '../utils/http';
-import type { UserProfile, UserSettings } from '../types/user';
+import type { UserProfile, UserSettings, ProfileUpdateParams } from '../types/user';
 
 /**
  * Module utilisateur
@@ -22,6 +22,29 @@ export class UserModule {
     const userData = response.data.user;
     
     // Mapper les champs du backend vers le format SDK
+    return {
+      id: userData.user_id,
+      email: userData.email || '',
+      full_name: userData.display_name || userData.public_name,
+      avatar_url: userData.avatar_url,
+      user_metadata: userData.user_metadata || {},
+      created_at: userData.created_at || '',
+      updated_at: userData.updated_at || '',
+      last_sign_in_at: userData.last_sign_in_at,
+      email_confirmed_at: userData.email_verified ? userData.email_confirmed_at || userData.updated_at : undefined
+    };
+  }
+
+  /**
+   * Mettre à jour le profil de l'utilisateur authentifié (partial update)
+   *
+   * @param params Champs à mettre à jour
+   * @returns Profil utilisateur mis à jour
+   */
+  async updateProfile(params: ProfileUpdateParams): Promise<UserProfile> {
+    const response = await this.http.patch<{ user: any }>('users/me/profile', params);
+    const userData = response.data.user;
+
     return {
       id: userData.user_id,
       email: userData.email || '',

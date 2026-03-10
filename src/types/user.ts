@@ -37,6 +37,20 @@ export interface UserProfile {
 }
 
 /**
+ * Paramètres pour mettre à jour le profil utilisateur
+ */
+export interface ProfileUpdateParams {
+  first_name?: string;
+  last_name?: string;
+  display_name?: string;
+  phone_number?: string;
+  nationality?: string;
+  gender?: string;
+  date_of_birth?: string;
+  language?: string;
+}
+
+/**
  * Settings utilisateur pour une app
  */
 export interface UserSettings {
