@@ -8,7 +8,7 @@ export type BookingType = 'trip' | 'trip_extension' | 'pass';
 
 export type PaymentMode = 'oneshot' | 'monthly';
 
-export type RequirementType = 'terms_acceptance' | 'mira_pass' | 'passport_kyc' | 'deposit_funded' | 'payment_collected';
+export type RequirementType = 'terms_acceptance' | 'user_data_complete' | 'mira_pass' | 'passport_kyc' | 'deposit_funded' | 'payment_collected';
 
 export type RequirementStatus = 'pending' | 'completed' | 'waived';
 
