@@ -4,6 +4,10 @@
 
 export type OfferStatus = 'draft' | 'published' | 'closed' | 'archived';
 
+export type OfferType = 'trip' | 'pass';
+
+export type PricingType = 'dynamic' | 'fixed';
+
 export type AccommodationTierEnum = 'hostel' | 'hotel_3' | 'hotel_4' | 'hotel_5' | 'apartment';
 
 export type TermTypeEnum = 'terms_of_service' | 'privacy_policy' | 'cancellation_policy' | 'travel_insurance';
@@ -73,11 +77,15 @@ export interface OfferEligibility {
 export interface PublicOffer {
   id: string;
   title: string;
+  offer_type: OfferType;
+  pricing_type: PricingType;
   destination_country: string;
   price_per_day: number;
   min_days: number;
   max_days: number;
   status: OfferStatus;
+  // Pass-specific (when offer_type === 'pass')
+  catalog_price?: number;
 }
 
 export interface PublicOfferDetail extends PublicOffer {
@@ -121,10 +129,12 @@ export interface PublicOffersListParams {
   page?: number;
   page_size?: number;
   country?: string;
+  offer_type?: OfferType | 'all';
 }
 
 export interface OffersListParams {
   page?: number;
   page_size?: number;
   country?: string;
+  offer_type?: OfferType | 'all';
 }

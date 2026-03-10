@@ -67,6 +67,8 @@ export type {
 // Offers types
 export type {
   OfferStatus,
+  OfferType,
+  PricingType,
   AccommodationTierEnum,
   TermTypeEnum,
   OfferSeason,
