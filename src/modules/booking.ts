@@ -2,10 +2,12 @@ import type { HttpClient } from '../utils/http';
 import type {
   Booking,
   BookingDetail,
+  BookingOption,
   BookingRequirement,
   BookingsList,
   BookingsListParams,
   CreateBookingParams,
+  CreateOptionParams,
   UpdateBookingOptionsParams,
   CancelBookingParams,
   ExtendBookingParams,
@@ -106,6 +108,51 @@ export class BookingModule {
       `payment/links/${paymentLinkId}/renew`,
     );
     return response.data;
+  }
+
+  // ── Booking options (masterclass add-ons) ──
+
+  async listAvailableOptions(bookingId: string): Promise<any[]> {
+    const response = await this.http.get<{ masterclasses: any[] }>(
+      `booking/bookings/${bookingId}/available-options`,
+    );
+    return response.data.masterclasses;
+  }
+
+  async listBookingOptions(bookingId: string): Promise<BookingOption[]> {
+    const response = await this.http.get<{ options: BookingOption[] }>(
+      `booking/bookings/${bookingId}/options`,
+    );
+    return response.data.options;
+  }
+
+  async createOption(bookingId: string, params: CreateOptionParams): Promise<BookingOption> {
+    const response = await this.http.post<{ option: BookingOption }>(
+      `booking/bookings/${bookingId}/options`,
+      params,
+    );
+    return response.data.option;
+  }
+
+  async acceptOption(bookingId: string, optionId: string): Promise<BookingOption> {
+    const response = await this.http.post<{ option: BookingOption }>(
+      `booking/bookings/${bookingId}/options/${optionId}/accept`,
+    );
+    return response.data.option;
+  }
+
+  async cancelOption(bookingId: string, optionId: string): Promise<BookingOption> {
+    const response = await this.http.post<{ option: BookingOption }>(
+      `booking/bookings/${bookingId}/options/${optionId}/cancel`,
+    );
+    return response.data.option;
+  }
+
+  async payOption(bookingId: string, optionId: string): Promise<BookingOption> {
+    const response = await this.http.post<{ option: BookingOption }>(
+      `booking/bookings/${bookingId}/options/${optionId}/pay`,
+    );
+    return response.data.option;
   }
 }
 

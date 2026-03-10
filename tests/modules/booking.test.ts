@@ -82,7 +82,7 @@ describe('BookingModule', () => {
   });
 
   it('extend sends POST and unwraps booking', async () => {
-    httpClient.post.mockResolvedValue(mockResponse({ booking: { id: 'bkg_ext_1', type: 'extension' } }));
+    httpClient.post.mockResolvedValue(mockResponse({ booking: { id: 'bkg_ext_1', type: 'trip_extension' } }));
     const result = await mod.extend('bkg_1', { extra_days: 14 });
     expect(httpClient.post).toHaveBeenCalledWith('booking/bookings/bkg_1/extend', { extra_days: 14 });
     expect(result.id).toBe('bkg_ext_1');
@@ -93,5 +93,51 @@ describe('BookingModule', () => {
     const result = await mod.confirmExtension('bkg_ext_1');
     expect(httpClient.post).toHaveBeenCalledWith('booking/bookings/bkg_ext_1/confirm-extension');
     expect(result.status).toBe('confirmed');
+  });
+
+  // Booking options (masterclass add-ons)
+
+  it('createOption sends POST and unwraps option', async () => {
+    httpClient.post.mockResolvedValue(mockResponse({ option: { id: 'bop_1', status: 'proposed', masterclass_id: 'mcl_1' } }));
+    const result = await mod.createOption('bkg_1', { masterclass_id: 'mcl_1' });
+    expect(httpClient.post).toHaveBeenCalledWith('booking/bookings/bkg_1/options', { masterclass_id: 'mcl_1' });
+    expect(result.id).toBe('bop_1');
+    expect(result.status).toBe('proposed');
+  });
+
+  it('acceptOption sends POST and unwraps option', async () => {
+    httpClient.post.mockResolvedValue(mockResponse({ option: { id: 'bop_1', status: 'accepted' } }));
+    const result = await mod.acceptOption('bkg_1', 'bop_1');
+    expect(httpClient.post).toHaveBeenCalledWith('booking/bookings/bkg_1/options/bop_1/accept');
+    expect(result.status).toBe('accepted');
+  });
+
+  it('cancelOption sends POST and unwraps option', async () => {
+    httpClient.post.mockResolvedValue(mockResponse({ option: { id: 'bop_1', status: 'cancelled' } }));
+    const result = await mod.cancelOption('bkg_1', 'bop_1');
+    expect(httpClient.post).toHaveBeenCalledWith('booking/bookings/bkg_1/options/bop_1/cancel');
+    expect(result.status).toBe('cancelled');
+  });
+
+  it('payOption sends POST and unwraps option', async () => {
+    httpClient.post.mockResolvedValue(mockResponse({ option: { id: 'bop_1', status: 'paid' } }));
+    const result = await mod.payOption('bkg_1', 'bop_1');
+    expect(httpClient.post).toHaveBeenCalledWith('booking/bookings/bkg_1/options/bop_1/pay');
+    expect(result.status).toBe('paid');
+  });
+
+  it('listBookingOptions sends GET and unwraps options array', async () => {
+    httpClient.get.mockResolvedValue(mockResponse({ options: [{ id: 'bop_1' }, { id: 'bop_2' }] }));
+    const result = await mod.listBookingOptions('bkg_1');
+    expect(httpClient.get).toHaveBeenCalledWith('booking/bookings/bkg_1/options');
+    expect(result).toHaveLength(2);
+  });
+
+  it('create with booking_type pass sends correct params', async () => {
+    const params = { offer_id: 'ofr_pass_1', booking_type: 'pass' as const, details: { pass_tier: 'explorer' } };
+    httpClient.post.mockResolvedValue(mockResponse({ booking: { id: 'bkg_pass_1', type: 'pass' } }));
+    const result = await mod.create(params);
+    expect(httpClient.post).toHaveBeenCalledWith('booking/bookings', params);
+    expect(result.type).toBe('pass');
   });
 });

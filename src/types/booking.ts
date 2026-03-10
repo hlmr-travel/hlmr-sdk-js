@@ -4,11 +4,11 @@
 
 export type BookingState = 'intent' | 'quoted' | 'pending' | 'confirming' | 'confirmed' | 'cancelled';
 
-export type BookingType = 'standard' | 'extension';
+export type BookingType = 'trip' | 'trip_extension' | 'pass';
 
 export type PaymentMode = 'oneshot' | 'monthly';
 
-export type RequirementType = 'terms_acceptance' | 'mira_pass' | 'passport_kyc' | 'deposit_funded';
+export type RequirementType = 'terms_acceptance' | 'mira_pass' | 'passport_kyc' | 'deposit_funded' | 'payment_collected';
 
 export type RequirementStatus = 'pending' | 'completed' | 'waived';
 
@@ -61,13 +61,15 @@ export interface Booking {
   id: string;
   type: BookingType;
   parent_booking_id?: string;
+  triggered_by_booking_id?: string;
   user_id: string;
   offer_id: string;
   status: BookingState;
-  start_date: string;
-  duration_days: number;
-  accommodation_tier: string;
-  departure_city: string;
+  // Trip-specific fields (nullable for pass bookings)
+  start_date?: string;
+  duration_days?: number;
+  accommodation_tier?: string;
+  departure_city?: string;
   travelers: number;
   room_sharing: boolean;
   payment_mode: PaymentMode;
@@ -79,6 +81,7 @@ export interface Booking {
   cancellation_fee?: number;
   expires_at?: string;
   quoted_at?: string;
+  details?: { [key: string]: any };
   created_at: string;
   updated_at: string;
 }
@@ -117,13 +120,18 @@ export interface BookingsList {
 
 export interface CreateBookingParams {
   offer_id: string;
-  start_date: string;
-  duration_days: number;
-  accommodation_tier: string;
-  departure_city: string;
-  travelers: number;
-  room_sharing: boolean;
-  payment_mode: PaymentMode;
+  booking_type?: BookingType;
+  // Trip-specific (required for trip, optional for pass)
+  start_date?: string;
+  duration_days?: number;
+  accommodation_tier?: string;
+  departure_city?: string;
+  travelers?: number;
+  room_sharing?: boolean;
+  payment_mode?: PaymentMode;
+  // Pass-specific
+  details?: { [key: string]: any };
+  triggered_by_booking_id?: string;
 }
 
 export interface UpdateBookingOptionsParams {
@@ -146,4 +154,31 @@ export interface BookingsListParams {
   page?: number;
   page_size?: number;
   status?: BookingState;
+  include_triggered?: boolean;
+}
+
+// Booking options (masterclass add-ons)
+
+export type OptionStatus = 'proposed' | 'accepted' | 'paid' | 'delivered' | 'settled' | 'refunded' | 'expired' | 'cancelled';
+
+export interface BookingOption {
+  id: string;
+  booking_id: string;
+  option_type: string;
+  masterclass_id: string;
+  status: OptionStatus;
+  price: number;
+  expires_at?: string;
+  paid_at?: string;
+  delivered_at?: string;
+  settled_at?: string;
+  payout_at?: string;
+  refund_amount?: number;
+  escrow_transaction_id?: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface CreateOptionParams {
+  masterclass_id: string;
 }

@@ -116,6 +116,9 @@ export type {
   CancelBookingParams,
   ExtendBookingParams,
   BookingsListParams,
+  OptionStatus,
+  BookingOption,
+  CreateOptionParams,
 } from './types/booking';
 
 // Public types (geo, terms)
