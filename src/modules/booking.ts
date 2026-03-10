@@ -154,6 +154,13 @@ export class BookingModule {
     );
     return response.data.option;
   }
+
+  async detach(bookingId: string): Promise<Booking> {
+    const response = await this.http.post<{ booking: Booking }>(
+      `booking/bookings/${bookingId}/detach`,
+    );
+    return response.data.booking;
+  }
 }
 
 function buildQueryString(params?: Record<string, any>): string {
