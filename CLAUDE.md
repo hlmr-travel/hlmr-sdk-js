@@ -18,6 +18,13 @@ SDK JavaScript/TypeScript public pour l'API Mira. Point d'acces unique pour tous
   - `setBearerToken(token)` : met a jour le token WS sans recreer le module. Appele automatiquement par `HlmrClient.setBearerToken()` et `clearBearerToken()`. Le token est utilise au prochain reconnect (la connexion active n'est pas affectee).
 - **AppsModule** : install/uninstall apps, scopes
 - **AuthModule** : bearerToken, refresh
+- **UserModule** : profil (`getProfile`, `updateProfile`), settings per-app (`getSettings`, `updateSettings`)
+- **BookingModule** : CRUD bookings, requirements (`checkRequirement`), pay, cancel, cancelPreview, detach, options masterclass
+- **PublicModule** : destinations, villes, termes, recherche offres (`searchOffers`)
+- **OffersModule** : CRUD offres (admin)
+- **PricingModule** : estimations de prix
+- **PaymentModule** : liens de paiement, renew
+- **LedgerModule** : wallets, transactions
 - Chaque module correspond a un microservice backend
 
 ## Token refresh pattern
