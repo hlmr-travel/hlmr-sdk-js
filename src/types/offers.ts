@@ -108,6 +108,20 @@ export interface Offer extends PublicOffer {
   eligibility: OfferEligibility;
 }
 
+// Availability per day
+
+export interface OfferAvailabilityDay {
+  date: string;
+  occupied: number;
+  capacity: number | null;
+  available: number | null;
+}
+
+export interface OfferAvailabilityParams {
+  start_date: string;
+  end_date: string;
+}
+
 // Paginated responses
 
 export interface PublicOffersList {

@@ -5,6 +5,8 @@ import type {
   PublicOfferDetail,
   SearchOffersParams,
   SearchOffersResult,
+  OfferAvailabilityDay,
+  OfferAvailabilityParams,
 } from '../types/offers';
 import type {
   PublicDestinationsList,
@@ -43,6 +45,15 @@ export class PublicModule {
       { skipAuth: true },
     );
     return response.data;
+  }
+
+  async getOfferAvailability(offerId: string, params: OfferAvailabilityParams): Promise<OfferAvailabilityDay[]> {
+    const query = buildQueryString(params);
+    const response = await this.http.get<{ offer_id: string; days: OfferAvailabilityDay[] }>(
+      `offers/public/offers/${offerId}/availability?${query}`,
+      { skipAuth: true },
+    );
+    return response.data.days;
   }
 
   async listDestinations(params?: PublicDestinationsListParams): Promise<PublicDestinationsList> {

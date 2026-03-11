@@ -89,6 +89,8 @@ export type {
   SortOrder,
   SearchOffersParams,
   SearchOffersResult,
+  OfferAvailabilityDay,
+  OfferAvailabilityParams,
 } from './types/offers';
 
 // Pricing types
