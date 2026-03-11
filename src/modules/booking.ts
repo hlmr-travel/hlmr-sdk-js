@@ -7,6 +7,7 @@ import type {
   BookingsList,
   BookingsListParams,
   CancelPreviewResult,
+  ConfirmQuoteParams,
   CreateBookingParams,
   CreateOptionParams,
   UpdateBookingOptionsParams,
@@ -42,8 +43,11 @@ export class BookingModule {
     return response.data.booking;
   }
 
-  async confirmQuote(bookingId: string): Promise<BookingDetail> {
-    const response = await this.http.post<{ booking: BookingDetail }>(`booking/bookings/${bookingId}/confirm-quote`);
+  async confirmQuote(bookingId: string, params?: ConfirmQuoteParams): Promise<BookingDetail> {
+    const response = await this.http.post<{ booking: BookingDetail }>(
+      `booking/bookings/${bookingId}/confirm-quote`,
+      params,
+    );
     return response.data.booking;
   }
 

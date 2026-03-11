@@ -124,6 +124,8 @@ export type {
   BookingExtension,
   BookingsList,
   CreateBookingParams,
+  ConfirmQuoteParams,
+  InsufficientBalanceDetail,
   UpdateBookingOptionsParams,
   CancelReasonType,
   CancelBookingParams,

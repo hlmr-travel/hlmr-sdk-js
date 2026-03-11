@@ -175,6 +175,17 @@ export interface ExtendBookingParams {
   extra_days: number;
 }
 
+export interface ConfirmQuoteParams {
+  payment_mode?: PaymentMode;
+  payment_method_id?: string;
+}
+
+export interface InsufficientBalanceDetail {
+  message: string;
+  min_amount: number;
+  wallet_balance: number;
+}
+
 export interface BookingsListParams {
   page?: number;
   page_size?: number;

@@ -181,4 +181,17 @@ export class HlmrApiError extends Error {
   isTimeoutError(): boolean {
     return this.code === 'TIMEOUT_ERROR';
   }
+
+  /**
+   * Vérifier si c'est une erreur de solde insuffisant (402)
+   * Retourne les détails (min_amount, wallet_balance) ou null.
+   */
+  getInsufficientBalanceDetail(): { min_amount: number; wallet_balance: number } | null {
+    if (this.statusCode !== 402) return null;
+    const detail = (this.response as any)?.data?.detail ?? (this.response as any)?.detail;
+    if (detail && typeof detail === 'object' && 'min_amount' in detail) {
+      return { min_amount: detail.min_amount, wallet_balance: detail.wallet_balance };
+    }
+    return null;
+  }
 }
