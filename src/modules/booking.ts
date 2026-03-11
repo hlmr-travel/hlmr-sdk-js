@@ -73,6 +73,13 @@ export class BookingModule {
     return response.data.requirements;
   }
 
+  async acknowledgeRequirement(bookingId: string, requirementId: string): Promise<BookingRequirement> {
+    const response = await this.http.post<{ requirement: BookingRequirement }>(
+      `booking/bookings/${bookingId}/requirements/${requirementId}/acknowledge`,
+    );
+    return response.data.requirement;
+  }
+
   async cancelPreview(bookingId: string): Promise<CancelPreviewResult> {
     const response = await this.http.post<CancelPreviewResult>(
       `booking/bookings/${bookingId}/cancel-preview`,

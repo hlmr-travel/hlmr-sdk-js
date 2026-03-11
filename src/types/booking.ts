@@ -8,7 +8,11 @@ export type BookingType = 'trip' | 'trip_extension' | 'pass';
 
 export type PaymentMode = 'oneshot' | 'monthly';
 
-export type RequirementType = 'terms_acceptance' | 'user_data_complete' | 'mira_pass' | 'passport_kyc' | 'deposit_funded' | 'payment_collected';
+export type RequirementType = 'terms_acceptance' | 'user_data_complete' | 'mira_pass' | 'passport_kyc' | 'deposit_funded' | 'payment_collected' | 'important_notice';
+
+export type NoticeSeverity = 'info' | 'warning' | 'critical';
+
+export type NoticeTheme = 'health' | 'visa' | 'logistics' | 'safety' | 'booking_change' | 'general';
 
 export type RequirementStatus = 'pending' | 'completed' | 'waived';
 
@@ -25,13 +29,21 @@ export interface PricingSnapshot {
   expires_at: string;
 }
 
+export interface NoticeMetadata {
+  title: { [locale: string]: string };
+  body: { [locale: string]: string };
+  severity: NoticeSeverity;
+  theme: NoticeTheme;
+  created_by: string;
+}
+
 export interface BookingRequirement {
   id: string;
   booking_id: string;
   type: RequirementType;
   status: RequirementStatus;
   completed_at?: string;
-  metadata?: { [key: string]: any };
+  metadata?: NoticeMetadata | { [key: string]: any };
 }
 
 export interface BookingInstallment {
