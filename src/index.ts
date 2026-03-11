@@ -146,6 +146,34 @@ export type {
   PublicDocumentsListParams,
 } from './types/public';
 
+// Terms module (user-facing signatures)
+export { TermsModule } from './modules/terms';
+
+// Terms types
+export type {
+  DocumentType,
+  DocumentStatus,
+  SecurityLevel,
+  UpdatePolicy,
+  GeoZone,
+  SignerType,
+  SignatureMethod,
+  TermsDocument,
+  TermsSignature,
+  TermsSignatureCheck,
+  TermsPendingDocument,
+  TermsPendingDocumentsResponse,
+  TermsComplianceResponse,
+  TermsSignaturesList,
+  SignDocumentParams,
+  TermsSignaturesListParams,
+  TermsDocumentByGroupResponse,
+  TermsDiffSummaryResponse,
+  TermsSignatureHistoryItem,
+  TermsDocumentSignatureHistory,
+  TermsPendingDocumentsParams,
+} from './types/terms';
+
 // Payment module
 export { PaymentModule } from './modules/payment';
 
@@ -154,6 +182,8 @@ export type {
   PaymentScope,
   PaymentLinkStatus,
   PayerType,
+  TopUpPurpose,
+  ExpenseType,
   PaymentLinkResult,
   FreePaymentLinkResult,
   CreatePaymentLinkParams,
@@ -164,12 +194,31 @@ export type {
   PaymentLinkBookingSummary,
   PaymentLinkStatusInfo,
   PaymentLink,
-  CreatePaymentIntentParams,
-  PaymentIntentResult,
-  ConfirmPaymentParams,
-  ConfirmPaymentResult,
   PayBookingParams,
   RenewPaymentLinkResult,
+  StripeTransferResult,
+  FundingBreakdown,
+  PaymentResult,
+  TopUpParams,
+  GiftTopUpParams,
+  AllocateParams,
+  SetupIntentResult,
+  PaymentMethod,
+  SubscriptionPayParams,
+  TripFundParams,
+  TripPaymentParams,
+  TripExpenseParams,
+  TripSplitParticipant,
+  TripSplitParams,
+  TripCloseParams,
+  TripReport,
+  DepositCreateParams,
+  DepositFundParams,
+  DepositMigrateParams,
+  ActivityCreateParams,
+  CreditEntry,
+  AvailableCredits,
+  WithdrawalParams,
 } from './types/payment';
 
 // Ledger module
