@@ -40,7 +40,7 @@ describe('BookingModule', () => {
   it('confirmQuote sends POST and unwraps booking', async () => {
     httpClient.post.mockResolvedValue(mockResponse({ booking: { id: 'bkg_1', status: 'pending' } }));
     const result = await mod.confirmQuote('bkg_1');
-    expect(httpClient.post).toHaveBeenCalledWith('booking/bookings/bkg_1/confirm-quote');
+    expect(httpClient.post).toHaveBeenCalledWith('booking/bookings/bkg_1/confirm-quote', undefined);
     expect(result.status).toBe('pending');
   });
 
