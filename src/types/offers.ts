@@ -102,8 +102,7 @@ export interface PublicOfferDetail extends PublicOffer {
 // Authenticated offer (includes capacity + eligibility)
 
 export interface Offer extends PublicOffer {
-  capacity: number;
-  reserved_count: number;
+  capacity: number | null;
   eligibility: OfferEligibility;
 }
 
