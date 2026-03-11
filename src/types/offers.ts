@@ -83,6 +83,8 @@ export interface PublicOffer {
   price_per_day: number;
   min_days: number;
   max_days: number;
+  open_date: string | null;
+  close_date: string | null;
   status: OfferStatus;
   // Pass-specific (when offer_type === 'pass')
   catalog_price?: number;
