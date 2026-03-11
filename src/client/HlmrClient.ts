@@ -23,6 +23,7 @@ import { BookingModule } from '../modules/booking';
 import { LedgerModule } from '../modules/ledger';
 import { PaymentModule } from '../modules/payment';
 import { TermsModule } from '../modules/terms';
+import { PromoModule } from '../modules/promo';
 import type { EventsModuleConfig } from '../types/events';
 
 /**
@@ -67,6 +68,9 @@ export class HlmrClient {
   /** Module terms (signatures utilisateur) */
   public readonly terms: TermsModule;
 
+  /** Module promo (vouchers + referral) */
+  public readonly promo: PromoModule;
+
   constructor(options: HlmrClientOptions & { eventsConfig?: EventsModuleConfig }) {
     const config = this.buildConfig(options);
     this.httpClient = new HttpClient(config);
@@ -84,6 +88,7 @@ export class HlmrClient {
     this.ledger = new LedgerModule(this.httpClient);
     this.payment = new PaymentModule(this.httpClient);
     this.terms = new TermsModule(this.httpClient);
+    this.promo = new PromoModule(this.httpClient);
   }
 
   /**

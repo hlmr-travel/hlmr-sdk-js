@@ -114,6 +114,7 @@ export type {
   NoticeTheme,
   NoticeMetadata,
   InstallmentStatus,
+  PromoApplied,
   PricingSnapshot,
   BookingRequirement,
   BookingInstallment,
@@ -124,6 +125,7 @@ export type {
   BookingExtension,
   BookingsList,
   CreateBookingParams,
+  QuoteParams,
   ConfirmQuoteParams,
   InsufficientBalanceDetail,
   UpdateBookingOptionsParams,
@@ -182,6 +184,22 @@ export type {
   TermsDocumentSignatureHistory,
   TermsPendingDocumentsParams,
 } from './types/terms';
+
+// Promo module (vouchers + referral)
+export { PromoModule } from './modules/promo';
+
+// Promo types
+export type {
+  DiscountType,
+  VoucherInvalidReason,
+  VoucherCheckOptions,
+  VoucherCheckResult,
+  ReferralRewardTier,
+  ReferralCode,
+  ReferralReward,
+  ReferralRewardsList,
+  ReferralEnrollmentResult,
+} from './types/promo';
 
 // Payment module
 export { PaymentModule } from './modules/payment';

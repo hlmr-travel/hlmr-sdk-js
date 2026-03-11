@@ -20,11 +20,19 @@ export type InstallmentStatus = 'pending' | 'paid' | 'overdue' | 'failed';
 
 // Sub-entities
 
+export interface PromoApplied {
+  voucher_id: string;
+  code: string;
+  discount_amount: number;
+  discount_type: 'percentage' | 'fixed';
+}
+
 export interface PricingSnapshot {
   total: number;
   deposit_target: number;
   breakdown: { [key: string]: any };
   payment_options: { mode: string; total: number; discount_applied?: number; installments?: any[] }[];
+  promo?: PromoApplied | null;
   integrity_hash: string;
   expires_at: string;
 }
@@ -173,6 +181,10 @@ export interface CancelBookingParams {
 
 export interface ExtendBookingParams {
   extra_days: number;
+}
+
+export interface QuoteParams {
+  promo_code?: string;
 }
 
 export interface ConfirmQuoteParams {

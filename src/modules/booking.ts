@@ -13,6 +13,7 @@ import type {
   UpdateBookingOptionsParams,
   CancelBookingParams,
   ExtendBookingParams,
+  QuoteParams,
   RequirementType,
 } from '../types/booking';
 import type {
@@ -33,8 +34,11 @@ export class BookingModule {
     return response.data.booking;
   }
 
-  async quote(bookingId: string): Promise<any> {
-    const response = await this.http.post<{ quote: any }>(`booking/bookings/${bookingId}/quote`);
+  async quote(bookingId: string, params?: QuoteParams): Promise<any> {
+    const response = await this.http.post<{ quote: any }>(
+      `booking/bookings/${bookingId}/quote`,
+      params,
+    );
     return response.data.quote;
   }
 
