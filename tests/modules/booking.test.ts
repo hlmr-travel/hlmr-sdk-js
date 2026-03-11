@@ -26,8 +26,14 @@ describe('BookingModule', () => {
   it('quote sends POST and unwraps quote', async () => {
     httpClient.post.mockResolvedValue(mockResponse({ quote: { id: 'bkg_1', status: 'quoted', pricing_snapshot: {} } }));
     const result = await mod.quote('bkg_1');
-    expect(httpClient.post).toHaveBeenCalledWith('booking/bookings/bkg_1/quote');
+    expect(httpClient.post).toHaveBeenCalledWith('booking/bookings/bkg_1/quote', undefined);
     expect(result.status).toBe('quoted');
+  });
+
+  it('quote passes promo_code when provided', async () => {
+    httpClient.post.mockResolvedValue(mockResponse({ quote: { id: 'bkg_1', status: 'quoted', pricing_snapshot: {} } }));
+    await mod.quote('bkg_1', { promo_code: 'EURATECH' });
+    expect(httpClient.post).toHaveBeenCalledWith('booking/bookings/bkg_1/quote', { promo_code: 'EURATECH' });
   });
 
   it('updateOptions sends PUT and unwraps booking', async () => {
