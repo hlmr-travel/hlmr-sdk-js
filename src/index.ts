@@ -123,6 +123,7 @@ export type {
   BookingsList,
   CreateBookingParams,
   UpdateBookingOptionsParams,
+  CancelReasonType,
   CancelBookingParams,
   ExtendBookingParams,
   BookingsListParams,
@@ -132,6 +133,7 @@ export type {
   CancelPreviewAlertSeverity,
   CancelPreviewAlert,
   LinkedBookingPreview,
+  CancellationScheduleTier,
   CancelPreviewResult,
 } from './types/booking';
 

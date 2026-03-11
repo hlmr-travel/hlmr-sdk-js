@@ -98,10 +98,20 @@ export interface Booking {
   updated_at: string;
 }
 
+export interface CancellationScheduleTier {
+  from_date: string;
+  days_before_departure: number;
+  rate: number | null;
+  penalty_amount: number;
+  refund_rate: number | null;
+  label: string;
+}
+
 export interface BookingDetail extends Booking {
   requirements: BookingRequirement[];
   installments: BookingInstallment[];
   events: BookingEvent[];
+  cancellation_schedule?: CancellationScheduleTier[];
 }
 
 // Action results
@@ -154,8 +164,11 @@ export interface UpdateBookingOptionsParams {
   payment_mode?: PaymentMode;
 }
 
+export type CancelReasonType = 'date_change' | 'unforeseen' | 'other';
+
 export interface CancelBookingParams {
-  reason: string;
+  reason_type: CancelReasonType;
+  comment?: string;
 }
 
 export interface ExtendBookingParams {
@@ -223,6 +236,7 @@ export interface CancelPreviewResult {
   cancellation_fee: number;
   amount_paid: number;
   refund_amount: number;
+  cancellation_schedule?: CancellationScheduleTier[];
   linked_bookings: LinkedBookingPreview[];
   alerts: CancelPreviewAlert[];
 }
