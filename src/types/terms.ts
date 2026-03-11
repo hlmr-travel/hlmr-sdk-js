@@ -101,20 +101,26 @@ export interface TermsSignatureCheck {
 // Pending document
 
 export interface TermsPendingDocument {
-  document_id: string;
+  id: string;
   type: DocumentType;
   app_id: string | null;
+  document_group_id: string | null;
   language: string;
   title: string;
+  content: string;
+  content_hash: string;
   summary: string | null;
   version: string;
+  version_number: number;
   geo_zones: string[];
+  status: DocumentStatus;
   security_level: SecurityLevel;
   update_policy: UpdatePolicy;
-  signature_required_at: string | null;
+  signature_opens_at: string | null;
   signature_closes_at: string | null;
+  published_at: string | null;
+  created_at: string | null;
   reason: string;
-  grace_period_ends_at: string | null;
   previous_signature: TermsSignature | null;
 }
 
