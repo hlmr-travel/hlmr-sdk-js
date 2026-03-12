@@ -17,7 +17,7 @@ export type TermTypeEnum = 'terms_of_service' | 'privacy_policy' | 'cancellation
 export interface OfferSeason {
   id: string;
   offer_id: string;
-  name: string;
+  label: string;
   start_date: string;
   end_date: string;
   coefficient: number;
@@ -38,8 +38,8 @@ export interface OfferAccommodationTier {
 export interface OfferFlightTier {
   id: string;
   offer_id: string;
-  departure_city: string;
-  distance_km: number;
+  min_distance_km: number;
+  max_distance_km: number;
   supplement: number;
   created_at: string;
   updated_at: string;
@@ -48,9 +48,9 @@ export interface OfferFlightTier {
 export interface OfferDurationDiscount {
   id: string;
   offer_id: string;
-  min_days: number;
-  max_days: number;
-  discount_percentage: number;
+  from_day: number;
+  to_day: number;
+  discount_rate: number;
   created_at: string;
   updated_at: string;
 }
@@ -58,9 +58,9 @@ export interface OfferDurationDiscount {
 export interface OfferTerm {
   id: string;
   offer_id: string;
-  term_type: TermTypeEnum;
-  document_id: string;
-  required: boolean;
+  term_type: string;
+  term_document_id: string;
+  is_required: boolean;
   created_at: string;
   updated_at: string;
 }
