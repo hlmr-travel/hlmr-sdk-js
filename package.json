@@ -1,6 +1,6 @@
 {
   "name": "@hlmr/sdk-js",
-  "version": "1.11.1",
+  "version": "1.11.2",
   "description": "SDK JavaScript officiel pour l'API Mira - Routes publiques et sécurisées",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
@@ -20,7 +20,7 @@
   "scripts": {
     "build": "npm run clean && npm run build:types && npm run build:esm && npm run build:cjs && npm run build:umd",
     "build:types": "tsc --emitDeclarationOnly --outDir dist/types",
-    "build:esm": "tsc --module es2015 --outDir dist/esm",
+    "build:esm": "tsc --module es2015 --outDir dist/esm && bash scripts/fix-esm-imports.sh",
     "build:cjs": "tsc --module commonjs --outDir dist/cjs",
     "build:umd": "rollup -c rollup.config.js",
     "clean": "rimraf dist/",
