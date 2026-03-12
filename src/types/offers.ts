@@ -8,9 +8,9 @@ export type OfferType = 'trip' | 'pass';
 
 export type PricingType = 'dynamic' | 'fixed';
 
-export type AccommodationTierEnum = 'hostel' | 'hotel_3' | 'hotel_4' | 'hotel_5' | 'apartment';
+export type AccommodationTierEnum = 'coliving' | 'hotel_3' | 'hotel_4' | 'hotel_5';
 
-export type TermTypeEnum = 'terms_of_service' | 'privacy_policy' | 'cancellation_policy' | 'travel_insurance';
+export type TermTypeEnum = 'cgu' | 'cgv' | 'assurance' | 'annulation';
 
 // Child entities
 
@@ -30,7 +30,7 @@ export interface OfferAccommodationTier {
   offer_id: string;
   tier: AccommodationTierEnum;
   supplement_per_night: number;
-  description?: string;
+  sort_order: number;
   created_at: string;
   updated_at: string;
 }
