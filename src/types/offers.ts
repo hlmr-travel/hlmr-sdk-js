@@ -80,12 +80,15 @@ export interface PublicOffer {
   offer_type: OfferType;
   pricing_type: PricingType;
   destination_country: string;
+  destination_lat: number;
+  destination_lng: number;
   price_per_day: number;
   min_days: number;
   max_days: number;
   open_date: string | null;
   close_date: string | null;
   status: OfferStatus;
+  media_urls?: string[];
   // Pass-specific (when offer_type === 'pass')
   catalog_price?: number;
 }
