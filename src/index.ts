@@ -260,6 +260,19 @@ export type {
   TransactionStats,
 } from './types/ledger';
 
+// Subscription module (Mira Pass)
+export { SubscriptionModule } from './modules/subscription';
+
+// Subscription types
+export type {
+  SubscriptionStatus,
+  SubscriptionType,
+  SubscriptionTier,
+  UserSubscription,
+  UserSubscriptionsList,
+  SubscriptionHistoryParams,
+} from './types/subscription';
+
 // Classes d'erreur (valeurs)
 export { HlmrApiError } from './types/errors';
 

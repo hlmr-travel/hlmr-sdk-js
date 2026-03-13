@@ -24,6 +24,7 @@ import { LedgerModule } from '../modules/ledger';
 import { PaymentModule } from '../modules/payment';
 import { TermsModule } from '../modules/terms';
 import { PromoModule } from '../modules/promo';
+import { SubscriptionModule } from '../modules/subscription';
 import type { EventsModuleConfig } from '../types/events';
 
 /**
@@ -71,6 +72,9 @@ export class HlmrClient {
   /** Module promo (vouchers + referral) */
   public readonly promo: PromoModule;
 
+  /** Module subscriptions (Mira Pass) */
+  public readonly subscription: SubscriptionModule;
+
   constructor(options: HlmrClientOptions & { eventsConfig?: EventsModuleConfig }) {
     const config = this.buildConfig(options);
     this.httpClient = new HttpClient(config);
@@ -89,6 +93,7 @@ export class HlmrClient {
     this.payment = new PaymentModule(this.httpClient);
     this.terms = new TermsModule(this.httpClient);
     this.promo = new PromoModule(this.httpClient);
+    this.subscription = new SubscriptionModule(this.httpClient);
   }
 
   /**
