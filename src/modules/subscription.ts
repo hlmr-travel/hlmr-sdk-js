@@ -27,9 +27,11 @@ export class SubscriptionModule {
    * Get subscription history of the authenticated user.
    */
   async getMyHistory(params?: SubscriptionHistoryParams): Promise<UserSubscriptionsList> {
+    const query = params
+      ? '?' + Object.entries(params).filter(([, v]) => v != null).map(([k, v]) => `${k}=${v}`).join('&')
+      : '';
     const response = await this.http.get<UserSubscriptionsList>(
-      'subscriptions/me/history',
-      { params },
+      `subscriptions/me/history${query}`,
     );
     return response.data;
   }
