@@ -266,6 +266,24 @@ export type {
 // Subscription module (Mira Pass)
 export { SubscriptionModule } from './modules/subscription';
 
+// Files module (upload, management, RGPD)
+export { FilesModule } from './modules/files';
+
+// Files types
+export type {
+  FileType,
+  FileVisibility,
+  FileStatus,
+  FileUploadOptions,
+  DeclareFileResponse,
+  HlmrFile,
+  FileUrlResponse,
+  FilesListParams,
+  FilesListResponse,
+} from './types/files';
+
+export { FileUploadError } from './types/files';
+
 // Subscription types
 export type {
   SubscriptionStatus,

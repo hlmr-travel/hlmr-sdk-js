@@ -25,6 +25,7 @@ import { PaymentModule } from '../modules/payment';
 import { TermsModule } from '../modules/terms';
 import { PromoModule } from '../modules/promo';
 import { SubscriptionModule } from '../modules/subscription';
+import { FilesModule } from '../modules/files';
 import type { EventsModuleConfig } from '../types/events';
 
 /**
@@ -75,6 +76,9 @@ export class HlmrClient {
   /** Module subscriptions (Mira Pass) */
   public readonly subscription: SubscriptionModule;
 
+  /** Module fichiers (upload presigned URL, gestion, RGPD) */
+  public readonly files: FilesModule;
+
   constructor(options: HlmrClientOptions & { eventsConfig?: EventsModuleConfig }) {
     const config = this.buildConfig(options);
     this.httpClient = new HttpClient(config);
@@ -94,6 +98,7 @@ export class HlmrClient {
     this.terms = new TermsModule(this.httpClient);
     this.promo = new PromoModule(this.httpClient);
     this.subscription = new SubscriptionModule(this.httpClient);
+    this.files = new FilesModule(this.httpClient);
   }
 
   /**
