@@ -31,7 +31,7 @@ export class FilesModule {
     let declared: DeclareFileResponse;
     try {
       const response = await this.http.post<DeclareFileResponse>(
-        'files/files/declare',
+        'files/declare',
         options,
       );
       declared = response.data;
@@ -57,7 +57,7 @@ export class FilesModule {
     // Step 3: Confirm
     try {
       const response = await this.http.post<HlmrFile>(
-        `files/files/${declared.file_id}/confirm`,
+        `files/${declared.file_id}/confirm`,
       );
       return response.data;
     } catch (err) {
@@ -68,26 +68,26 @@ export class FilesModule {
   /** List files for the authenticated user. */
   async list(params?: FilesListParams): Promise<FilesListResponse> {
     const query = buildQueryString(params);
-    const path = query ? `files/files?${query}` : 'files/files';
+    const path = query ? `files?${query}` : 'files';
     const response = await this.http.get<FilesListResponse>(path);
     return response.data;
   }
 
   /** Get file metadata by ID. */
   async get(fileId: string): Promise<HlmrFile> {
-    const response = await this.http.get<HlmrFile>(`files/files/${fileId}`);
+    const response = await this.http.get<HlmrFile>(`files/${fileId}`);
     return response.data;
   }
 
   /** Get a presigned download URL for a file. */
   async getUrl(fileId: string): Promise<FileUrlResponse> {
-    const response = await this.http.get<FileUrlResponse>(`files/files/${fileId}/url`);
+    const response = await this.http.get<FileUrlResponse>(`files/${fileId}/url`);
     return response.data;
   }
 
   /** Delete a file. */
   async delete(fileId: string): Promise<{ deleted: boolean }> {
-    const response = await this.http.delete<{ deleted: boolean }>(`files/files/${fileId}`);
+    const response = await this.http.delete<{ deleted: boolean }>(`files/${fileId}`);
     return response.data;
   }
 }
