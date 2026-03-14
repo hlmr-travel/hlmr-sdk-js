@@ -23,6 +23,9 @@ export type {
 } from './types/auth';
 
 export type {
+  UserEmail,
+  UserPhone,
+  UserIdentity,
   UserProfile,
   UserSettings,
   ProfileUpdateParams

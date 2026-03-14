@@ -7,6 +7,30 @@ import type { HttpClient } from '../utils/http';
 import type { UserProfile, UserSettings, ProfileUpdateParams } from '../types/user';
 
 /**
+ * Map raw backend user response to UserProfile.
+ */
+function mapUserProfile(data: any): UserProfile {
+  return {
+    id: data._id || data.id,
+    public_name: data.public_name || '',
+    display_name: data.display_name,
+    avatar_url: data.avatar_url,
+    emails: data.emails || [],
+    phones: data.phones || [],
+    identity: data.identity || {},
+    identity_verified: data.identity_verified ?? false,
+    identity_locked: data.identity_locked ?? false,
+    role: data.role,
+    is_founder: data.is_founder ?? false,
+    status: data.status,
+    created_at: data.created_at || '',
+    updated_at: data.updated_at || '',
+    deleted_at: data.deleted_at,
+    synced_from_supabase_at: data.synced_from_supabase_at,
+  };
+}
+
+/**
  * Module utilisateur
  */
 export class UserModule {
@@ -14,48 +38,23 @@ export class UserModule {
 
   /**
    * Récupérer le profil de l'utilisateur authentifié
-   * 
-   * @returns Profil utilisateur basique
+   *
+   * @returns Profil utilisateur
    */
   async getProfile(): Promise<UserProfile> {
     const response = await this.http.get<{ user: any }>('users/me');
-    const userData = response.data.user;
-    
-    // Mapper les champs du backend vers le format SDK
-    return {
-      id: userData.user_id,
-      email: userData.email || '',
-      full_name: userData.display_name || userData.public_name,
-      avatar_url: userData.avatar_url,
-      user_metadata: userData.user_metadata || {},
-      created_at: userData.created_at || '',
-      updated_at: userData.updated_at || '',
-      last_sign_in_at: userData.last_sign_in_at,
-      email_confirmed_at: userData.email_verified ? userData.email_confirmed_at || userData.updated_at : undefined
-    };
+    return mapUserProfile(response.data.user);
   }
 
   /**
    * Mettre à jour le profil de l'utilisateur authentifié (partial update)
    *
-   * @param params Champs à mettre à jour
+   * @param params Champs à mettre à jour (display_name, identity)
    * @returns Profil utilisateur mis à jour
    */
   async updateProfile(params: ProfileUpdateParams): Promise<UserProfile> {
     const response = await this.http.patch<{ user: any }>('users/me/profile', params);
-    const userData = response.data.user;
-
-    return {
-      id: userData.user_id,
-      email: userData.email || '',
-      full_name: userData.display_name || userData.public_name,
-      avatar_url: userData.avatar_url,
-      user_metadata: userData.user_metadata || {},
-      created_at: userData.created_at || '',
-      updated_at: userData.updated_at || '',
-      last_sign_in_at: userData.last_sign_in_at,
-      email_confirmed_at: userData.email_verified ? userData.email_confirmed_at || userData.updated_at : undefined
-    };
+    return mapUserProfile(response.data.user);
   }
 
   /**

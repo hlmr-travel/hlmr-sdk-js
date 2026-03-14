@@ -3,51 +3,95 @@
  */
 
 /**
- * Profil utilisateur basique (routes publiques uniquement)
+ * Email dans le profil utilisateur
+ */
+export interface UserEmail {
+  email: string;
+  is_verified: boolean;
+  is_primary: boolean;
+  verified_at?: string;
+}
+
+/**
+ * Téléphone dans le profil utilisateur
+ */
+export interface UserPhone {
+  number: string;
+  is_verified: boolean;
+  is_primary: boolean;
+  verified_at?: string;
+}
+
+/**
+ * Identité de l'utilisateur (données personnelles)
+ */
+export interface UserIdentity {
+  first_name?: string;
+  last_name?: string;
+  date_of_birth?: string;
+  nationality?: string;
+  gender?: string;
+}
+
+/**
+ * Profil utilisateur (routes publiques uniquement)
  */
 export interface UserProfile {
   /** ID unique de l'utilisateur */
   id: string;
-  
-  /** Adresse email */
-  email: string;
-  
-  /** Nom complet (optionnel) */
-  full_name?: string;
-  
-  /** Avatar URL (optionnel) */
+
+  /** Nom public (ex: "Cédric T.") */
+  public_name: string;
+
+  /** Nom d'affichage personnalisé */
+  display_name?: string;
+
+  /** Avatar URL */
   avatar_url?: string;
-  
-  /** Métadonnées publiques */
-  user_metadata?: {
-    [key: string]: any;
-  };
-  
+
+  /** Emails */
+  emails: UserEmail[];
+
+  /** Téléphones */
+  phones: UserPhone[];
+
+  /** Identité */
+  identity: UserIdentity;
+
+  /** Identité vérifiée */
+  identity_verified: boolean;
+
+  /** Identité verrouillée (non modifiable en self-service) */
+  identity_locked: boolean;
+
+  /** Rôle */
+  role?: string;
+
+  /** Badge fondateur */
+  is_founder: boolean;
+
+  /** Statut du compte */
+  status?: string;
+
   /** Date de création du compte */
   created_at: string;
-  
+
   /** Dernière mise à jour */
   updated_at: string;
-  
-  /** Dernière connexion */
-  last_sign_in_at?: string;
-  
-  /** Email confirmé */
-  email_confirmed_at?: string;
+
+  /** Suppression logique */
+  deleted_at?: string;
+
+  /** Dernier sync Supabase */
+  synced_from_supabase_at?: string;
 }
 
 /**
  * Paramètres pour mettre à jour le profil utilisateur
  */
 export interface ProfileUpdateParams {
-  first_name?: string;
-  last_name?: string;
   display_name?: string;
-  phone_number?: string;
-  nationality?: string;
-  gender?: string;
-  date_of_birth?: string;
-  language?: string;
+  identity?: Partial<UserIdentity>;
 }
 
 /**
